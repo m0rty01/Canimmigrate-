@@ -34,6 +34,26 @@ interface ChatMessage {
   parts: MessagePart[];
 }
 
+function cleanResponseText(text: string): string {
+  let cleaned = text.replace(/<function_calls>[\s\S]*?<\/antml:function_calls>/gi, '');
+  cleaned = cleaned.replace(/<function_calls>[\s\S]*?<\/function_calls>/gi, '');
+  cleaned = cleaned.replace(/<invoke[\s\S]*?<\/antml:invoke>/gi, '');
+  cleaned = cleaned.replace(/<invoke[\s\S]*?<\/invoke>/gi, '');
+  cleaned = cleaned.replace(/<parameter[\s\S]*?<\/antml:parameter>/gi, '');
+  cleaned = cleaned.replace(/<parameter[\s\S]*?<\/parameter>/gi, '');
+  cleaned = cleaned.replace(/<\/?antml:\w+[^>]*>/gi, '');
+  cleaned = cleaned.replace(/<\/?function_calls>/gi, '');
+  cleaned = cleaned.replace(/<\/?invoke[^>]*>/gi, '');
+  cleaned = cleaned.replace(/<\/?parameter[^>]*>/gi, '');
+  cleaned = cleaned.replace(/```[\w]*\n?/g, '');
+  cleaned = cleaned.replace(/\*\*([^*]+)\*\*/g, '$1');
+  cleaned = cleaned.replace(/\*([^*]+)\*/g, '$1');
+  cleaned = cleaned.replace(/^#{1,6}\s+/gm, '');
+  cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
+  cleaned = cleaned.trim();
+  return cleaned;
+}
+
 const SYSTEM_PROMPT = `You are CanImmigrate+ AI Assistant, an expert on Canadian immigration. You help users understand:
 - Express Entry (Federal Skilled Worker, Canadian Experience Class, Federal Skilled Trades)
 - Provincial Nominee Programs (PNPs) for all provinces
@@ -130,6 +150,8 @@ export default function AIChatScreen() {
         >
           {msg.parts.map((part: MessagePart, i: number) => {
             if (part.type === 'text' && part.text) {
+              const displayText = isUser ? part.text : cleanResponseText(part.text);
+              if (!displayText) return null;
               return (
                 <Text
                   key={`${msg.id}-${i}`}
@@ -138,7 +160,7 @@ export default function AIChatScreen() {
                     isUser ? { color: colors.textLight } : { color: colors.text },
                   ]}
                 >
-                  {part.text}
+                  {displayText}
                 </Text>
               );
             }
