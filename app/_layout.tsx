@@ -18,6 +18,10 @@ function RootLayoutNav() {
         name="onboarding"
         options={{ headerShown: false, presentation: 'fullScreenModal', gestureEnabled: false }}
       />
+      <Stack.Screen
+        name="ai-chat"
+        options={{ headerShown: false, presentation: 'modal' }}
+      />
     </Stack>
   );
 }

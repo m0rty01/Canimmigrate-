@@ -16,11 +16,11 @@ import {
   Lightbulb,
   CheckCircle2,
   Circle,
-  ChevronRight,
   Newspaper,
   Calculator,
   Map,
   Sparkles,
+  MessageCircle,
 } from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser } from '@/providers/UserProvider';
@@ -76,7 +76,7 @@ export default function DashboardScreen() {
 
   const recentDraws = drawHistory.slice(0, 3);
   const topTips = tips.slice(0, 3);
-  const visibleChecklist = checklist.slice(0, 5);
+  const visibleChecklist = checklist;
 
   return (
     <View style={[styles.container, { paddingTop: insets.top, backgroundColor: colors.background }]}>
@@ -169,6 +169,24 @@ export default function DashboardScreen() {
           </TouchableOpacity>
         </View>
 
+        <TouchableOpacity
+          style={[styles.aiChatBanner, { backgroundColor: colors.secondary }]}
+          onPress={() => router.push('/ai-chat' as any)}
+          activeOpacity={0.85}
+          testID="ai-chat-btn"
+        >
+          <View style={styles.aiChatLeft}>
+            <View style={[styles.aiChatIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+              <MessageCircle size={20} color={colors.textLight} />
+            </View>
+            <View>
+              <Text style={[styles.aiChatTitle, { color: colors.textLight }]}>AI Immigration Assistant</Text>
+              <Text style={[styles.aiChatSubtitle, { color: 'rgba(255,255,255,0.75)' }]}>Get personalized guidance</Text>
+            </View>
+          </View>
+          <Sparkles size={18} color={colors.textLight} />
+        </TouchableOpacity>
+
         {topTips.length > 0 && (
           <View style={[styles.section, { backgroundColor: colors.surface }]}>
             <View style={styles.sectionHeader}>
@@ -252,12 +270,7 @@ export default function DashboardScreen() {
               </Text>
             </TouchableOpacity>
           ))}
-          {checklist.length > 5 && (
-            <TouchableOpacity style={styles.viewAllBtn}>
-              <Text style={[styles.viewAllText, { color: colors.primary }]}>View all items</Text>
-              <ChevronRight size={16} color={colors.primary} />
-            </TouchableOpacity>
-          )}
+
         </View>
 
         <View style={{ height: 24 }} />
@@ -525,15 +538,32 @@ const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
   },
-  viewAllBtn: {
+  aiChatBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-    paddingTop: 12,
+    justifyContent: 'space-between',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 24,
   },
-  viewAllText: {
-    fontSize: 14,
-    fontWeight: '600' as const,
+  aiChatLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  aiChatIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  aiChatTitle: {
+    fontSize: 15,
+    fontWeight: '700' as const,
+  },
+  aiChatSubtitle: {
+    fontSize: 12,
+    marginTop: 1,
   },
 });
