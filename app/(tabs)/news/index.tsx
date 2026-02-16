@@ -79,6 +79,7 @@ function DrawHistoryChart() {
   const { colors } = useTheme();
   const maxScore = Math.max(...drawHistory.map((d) => d.score));
   const minScore = Math.min(...drawHistory.map((d) => d.score));
+  const isGeneralType = (type: string) => ['CEC', 'FSW', 'General'].includes(type);
   const range = maxScore - minScore || 1;
 
   return (
@@ -89,7 +90,7 @@ function DrawHistoryChart() {
         <View style={styles.chartContainer}>
           {drawHistory.map((draw, idx) => {
             const heightPct = ((draw.score - minScore + 20) / (range + 40)) * 100;
-            const isGeneral = draw.type === 'General';
+            const isGeneral = isGeneralType(draw.type);
             return (
               <View key={idx} style={styles.chartBar}>
                 <Text style={[styles.chartBarScore, { color: colors.text }]}>{draw.score}</Text>
@@ -116,11 +117,11 @@ function DrawHistoryChart() {
       <View style={styles.chartLegend}>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: colors.primary }]} />
-          <Text style={[styles.legendText, { color: colors.textSecondary }]}>General</Text>
+          <Text style={[styles.legendText, { color: colors.textSecondary }]}>CEC / FSW / General</Text>
         </View>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: colors.info }]} />
-          <Text style={[styles.legendText, { color: colors.textSecondary }]}>Category-based</Text>
+          <Text style={[styles.legendText, { color: colors.textSecondary }]}>PNP / French / Other</Text>
         </View>
       </View>
     </View>
