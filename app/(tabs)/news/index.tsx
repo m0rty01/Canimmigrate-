@@ -1,17 +1,20 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TrendingUp, Users, FileText, ExternalLink } from 'lucide-react-native';
+import { TrendingUp, Users, FileText, ExternalLink, Wifi, WifiOff, RefreshCw } from 'lucide-react-native';
 import { Linking } from 'react-native';
+import { useQuery } from '@tanstack/react-query';
 import { useTheme } from '@/providers/ThemeProvider';
-import { newsItems, drawHistory } from '@/mocks/news';
-import type { NewsItem } from '@/types/immigration';
+import { fetchLiveNewsData } from '@/services/newsService';
+import type { NewsItem, DrawRecord } from '@/types/immigration';
 
 type NewsCategory = 'all' | 'draw' | 'policy' | 'update';
 
@@ -21,6 +24,21 @@ const CATEGORY_FILTERS: { key: NewsCategory; label: string }[] = [
   { key: 'policy', label: 'Policy' },
   { key: 'update', label: 'Updates' },
 ];
+
+const AUTO_REFRESH_INTERVAL = 5 * 60 * 1000;
+
+function formatLastUpdated(isoString: string): string {
+  const date = new Date(isoString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+
+  if (diffMin < 1) return 'Just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h ago`;
+  return date.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+}
 
 function NewsCard({ item }: { item: NewsItem }) {
   const { colors } = useTheme();
@@ -75,7 +93,7 @@ function NewsCard({ item }: { item: NewsItem }) {
   );
 }
 
-function DrawHistoryChart() {
+function DrawHistoryChart({ drawHistory }: { drawHistory: DrawRecord[] }) {
   const { colors } = useTheme();
   const maxScore = Math.max(...drawHistory.map((d) => d.score));
   const minScore = Math.min(...drawHistory.map((d) => d.score));
@@ -133,10 +151,41 @@ export default function NewsScreen() {
   const { colors } = useTheme();
   const [activeFilter, setActiveFilter] = useState<NewsCategory>('all');
 
+  const {
+    data,
+    isLoading,
+    isRefetching,
+    refetch,
+    dataUpdatedAt,
+  } = useQuery({
+    queryKey: ['live-news'],
+    queryFn: fetchLiveNewsData,
+    refetchInterval: AUTO_REFRESH_INTERVAL,
+    refetchOnWindowFocus: true,
+    staleTime: 2 * 60 * 1000,
+    retry: 2,
+  });
+
+  const newsItems = data?.newsItems ?? [];
+  const drawHistory = data?.drawHistory ?? [];
+  const isLive = data?.isLive ?? false;
+
   const filteredNews = useMemo(() => {
     if (activeFilter === 'all') return newsItems;
     return newsItems.filter((item) => item.category === activeFilter);
-  }, [activeFilter]);
+  }, [activeFilter, newsItems]);
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    console.log('[News] Pull-to-refresh triggered');
+    await refetch();
+    setRefreshing(false);
+  }, [refetch]);
+
+  const lastUpdatedText = dataUpdatedAt
+    ? formatLastUpdated(new Date(dataUpdatedAt).toISOString())
+    : '';
 
   return (
     <View style={[styles.container, { paddingTop: insets.top, backgroundColor: colors.background }]}>
@@ -144,9 +193,51 @@ export default function NewsScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+          />
+        }
       >
-        <Text style={[styles.screenTitle, { color: colors.text }]}>News & Updates</Text>
-        <Text style={[styles.screenSubtitle, { color: colors.textSecondary }]}>Latest immigration developments</Text>
+        <View style={styles.headerRow}>
+          <View style={styles.headerTextCol}>
+            <Text style={[styles.screenTitle, { color: colors.text }]}>News & Updates</Text>
+            <Text style={[styles.screenSubtitle, { color: colors.textSecondary }]}>Latest immigration developments</Text>
+          </View>
+          <TouchableOpacity
+            style={[styles.refreshBtn, { backgroundColor: colors.surface }]}
+            onPress={onRefresh}
+            activeOpacity={0.7}
+          >
+            {isRefetching ? (
+              <ActivityIndicator size="small" color={colors.primary} />
+            ) : (
+              <RefreshCw size={18} color={colors.textSecondary} />
+            )}
+          </TouchableOpacity>
+        </View>
+
+        <View style={[styles.statusBar, { backgroundColor: isLive ? '#E8F5E9' : colors.surfaceAlt }]}>
+          {isLive ? (
+            <Wifi size={13} color="#2E7D32" />
+          ) : (
+            <WifiOff size={13} color={colors.textMuted} />
+          )}
+          <Text style={[styles.statusText, { color: isLive ? '#2E7D32' : colors.textMuted }]}>
+            {isLive ? 'Live from IRCC' : 'Offline — showing cached data'}
+          </Text>
+          {lastUpdatedText ? (
+            <Text style={[styles.statusTime, { color: isLive ? '#558B2F' : colors.textMuted }]}>
+              · Updated {lastUpdatedText}
+            </Text>
+          ) : null}
+          {isLoading && (
+            <ActivityIndicator size="small" color={colors.primary} style={{ marginLeft: 6 }} />
+          )}
+        </View>
 
         <ScrollView
           horizontal
@@ -177,11 +268,18 @@ export default function NewsScreen() {
           ))}
         </ScrollView>
 
-        <DrawHistoryChart />
+        {drawHistory.length > 0 && <DrawHistoryChart drawHistory={drawHistory} />}
 
-        {filteredNews.map((item) => (
-          <NewsCard key={item.id} item={item} />
-        ))}
+        {isLoading && newsItems.length === 0 ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={colors.primary} />
+            <Text style={[styles.loadingText, { color: colors.textMuted }]}>Loading latest news...</Text>
+          </View>
+        ) : (
+          filteredNews.map((item) => (
+            <NewsCard key={item.id} item={item} />
+          ))
+        )}
 
         <View style={{ height: 24 }} />
       </ScrollView>
@@ -200,6 +298,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 16,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  headerTextCol: {
+    flex: 1,
+  },
+  refreshBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 1,
+  },
   screenTitle: {
     fontSize: 28,
     fontWeight: '800' as const,
@@ -208,7 +327,24 @@ const styles = StyleSheet.create({
   screenSubtitle: {
     fontSize: 15,
     marginTop: 2,
-    marginBottom: 16,
+    marginBottom: 10,
+  },
+  statusBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    marginBottom: 14,
+    gap: 6,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '600' as const,
+  },
+  statusTime: {
+    fontSize: 12,
+    fontWeight: '400' as const,
   },
   filterScroll: {
     marginBottom: 20,
@@ -375,5 +511,15 @@ const styles = StyleSheet.create({
   },
   newsSource: {
     fontSize: 11,
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 60,
+    gap: 12,
+  },
+  loadingText: {
+    fontSize: 14,
+    fontWeight: '500' as const,
   },
 });
