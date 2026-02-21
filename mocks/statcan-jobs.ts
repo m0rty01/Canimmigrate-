@@ -759,7 +759,7 @@ export const occupations: OccupationData[] = [
     outlook: 'stable',
   },
   {
-    noc: '22220',
+    noc: '22222',
     title: 'IT Support / Network Administrator',
     category: 'Technology',
     nationalAvgWage: 62000,
