@@ -132,35 +132,37 @@ export default function AnalyticsScreen() {
   }, []);
 
   const renderSectionPills = () => (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.pillContainer}
-    >
-      {SECTIONS.map((section) => {
-        const isActive = activeSection === section.key;
-        const IconComp = section.icon;
-        return (
-          <TouchableOpacity
-            key={section.key}
-            onPress={() => setActiveSection(section.key)}
-            style={[
-              styles.pill,
-              {
-                backgroundColor: isActive ? colors.primary : colors.surface,
-                borderColor: isActive ? colors.primary : colors.border,
-              },
-            ]}
-            activeOpacity={0.7}
-          >
-            <IconComp size={14} color={isActive ? '#FFF' : colors.textSecondary} />
-            <Text style={[styles.pillText, { color: isActive ? '#FFF' : colors.textSecondary }]}>
-              {section.label}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
-    </ScrollView>
+    <View style={styles.pillWrapper}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.pillContainer}
+      >
+        {SECTIONS.map((section) => {
+          const isActive = activeSection === section.key;
+          const IconComp = section.icon;
+          return (
+            <TouchableOpacity
+              key={section.key}
+              onPress={() => setActiveSection(section.key)}
+              style={[
+                styles.pill,
+                {
+                  backgroundColor: isActive ? colors.primary : colors.surface,
+                  borderColor: isActive ? colors.primary : colors.border,
+                },
+              ]}
+              activeOpacity={0.7}
+            >
+              <IconComp size={14} color={isActive ? '#FFF' : colors.textSecondary} />
+              <Text style={[styles.pillText, { color: isActive ? '#FFF' : colors.textSecondary }]}>
+                {section.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </View>
   );
 
   const renderJobExplorer = () => (
@@ -793,10 +795,15 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.75)',
     marginTop: 2,
   },
+  pillWrapper: {
+    flexShrink: 0,
+  },
   pillContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     gap: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   pill: {
     flexDirection: 'row',
