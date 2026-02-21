@@ -94,7 +94,9 @@ export async function fetchLiveAlerts(): Promise<LiveAlertsData> {
       .slice(0, 10)
       .map((round, idx) => roundToAlert(round, idx));
 
-    const allAlerts = [...drawAlerts, ...fallbackAlerts].sort(
+    const seenIds = new Set(drawAlerts.map(a => a.id));
+    const uniqueFallback = fallbackAlerts.filter(a => !seenIds.has(a.id));
+    const allAlerts = [...drawAlerts, ...uniqueFallback].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 

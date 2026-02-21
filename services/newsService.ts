@@ -129,7 +129,9 @@ export async function fetchLiveNewsData(): Promise<LiveNewsData> {
       (item) => item.category === 'policy' || item.category === 'update'
     );
 
-    const allNews = [...drawNewsItems, ...policyAndUpdates].sort(
+    const seenIds = new Set(drawNewsItems.map(n => n.id));
+    const uniquePolicyUpdates = policyAndUpdates.filter(n => !seenIds.has(n.id));
+    const allNews = [...drawNewsItems, ...uniquePolicyUpdates].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 

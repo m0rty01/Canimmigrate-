@@ -214,7 +214,7 @@ export default function DashboardScreen() {
             <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Draws</Text>
           </View>
           {recentDraws.map((draw, idx) => (
-            <View key={idx} style={[styles.drawCard, { borderBottomColor: colors.border }]}>
+            <View key={`${draw.date}-${draw.type}-${idx}`} style={[styles.drawCard, { borderBottomColor: colors.border }]}>
               <View style={styles.drawInfo}>
                 <Text style={[styles.drawType, { color: colors.text }]}>{draw.type}</Text>
                 <Text style={[styles.drawDate, { color: colors.textMuted }]}>{draw.date}</Text>

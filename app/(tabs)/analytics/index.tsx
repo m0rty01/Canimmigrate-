@@ -470,7 +470,7 @@ export default function AnalyticsScreen() {
       </Text>
 
       {settlementOutcomes.map((outcome, idx) => (
-        <View key={idx} style={[styles.settlementCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <View key={`${outcome.admissionCategory}-${outcome.originRegion}-${outcome.field}-${outcome.province}`} style={[styles.settlementCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <View style={styles.settlementHeader}>
             <View style={[styles.admissionBadge, { backgroundColor: colors.primary + '15' }]}>
               <Text style={[styles.admissionBadgeText, { color: colors.primary }]}>{outcome.admissionCategory}</Text>

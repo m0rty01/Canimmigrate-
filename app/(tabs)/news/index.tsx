@@ -110,7 +110,7 @@ function DrawHistoryChart({ drawHistory }: { drawHistory: DrawRecord[] }) {
             const heightPct = ((draw.score - minScore + 20) / (range + 40)) * 100;
             const isGeneral = isGeneralType(draw.type);
             return (
-              <View key={idx} style={styles.chartBar}>
+              <View key={`${draw.date}-${draw.type}-${idx}`} style={styles.chartBar}>
                 <Text style={[styles.chartBarScore, { color: colors.text }]}>{draw.score}</Text>
                 <View style={[styles.chartBarTrack, { backgroundColor: colors.surfaceAlt }]}>
                   <View
