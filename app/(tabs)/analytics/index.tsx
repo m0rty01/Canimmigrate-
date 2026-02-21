@@ -9,10 +9,11 @@ import {
   Animated,
   Platform,
   Dimensions,
-  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useQuery } from '@tanstack/react-query';
 import {
   Search,
   Briefcase,
@@ -25,7 +26,6 @@ import {
   ChevronDown,
   ChevronUp,
   MapPin,
-  Building2,
   ArrowUpRight,
   ArrowDownRight,
   Minus,
@@ -37,11 +37,15 @@ import {
   BarChart3,
   ArrowRight,
   X,
+  RefreshCw,
+  Wifi,
+  WifiOff,
 } from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser } from '@/providers/UserProvider';
 import { occupations, cityLivingCosts, settlementOutcomes, demographicInsights } from '@/mocks/statcan-data';
 import { immigrationTargets, categoryBreakdowns, trendAlerts } from '@/mocks/ircc-plans';
+import { fetchLiveAlerts } from '@/services/alertsService';
 import type { OccupationData, CityLivingCost, SettlementOutcome, DemographicInsight, AnalyticsSection, TrendAlert as TrendAlertType } from '@/types/analytics';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -66,7 +70,23 @@ export default function AnalyticsScreen() {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [selectedDemoCity, setSelectedDemoCity] = useState<string>('Toronto');
+  const [citySearch, setCitySearch] = useState<string>('');
+  const [demoSearch, setDemoSearch] = useState<string>('');
+  const [alertFilter, setAlertFilter] = useState<string>('all');
   const headerAnim = useRef(new Animated.Value(0)).current;
+
+  const liveAlertsQuery = useQuery({
+    queryKey: ['live-alerts'],
+    queryFn: fetchLiveAlerts,
+    refetchInterval: 5 * 60 * 1000,
+    staleTime: 3 * 60 * 1000,
+  });
+
+  const liveAlerts = useMemo(() => {
+    return liveAlertsQuery.data?.alerts ?? trendAlerts;
+  }, [liveAlertsQuery.data]);
+
+  const isAlertsLive = liveAlertsQuery.data?.isLive ?? false;
 
   useEffect(() => {
     Animated.timing(headerAnim, {
@@ -84,9 +104,30 @@ export default function AnalyticsScreen() {
     );
   }, [jobSearch]);
 
+  const filteredCostCities = useMemo(() => {
+    if (!citySearch.trim()) return cityLivingCosts;
+    const q = citySearch.toLowerCase();
+    return cityLivingCosts.filter(
+      (c) => c.city.toLowerCase().includes(q) || c.province.toLowerCase().includes(q)
+    );
+  }, [citySearch]);
+
   const comparedCities = useMemo(() => {
     return cityLivingCosts.filter((c) => compareCities.includes(c.city));
   }, [compareCities]);
+
+  const filteredDemoCities = useMemo(() => {
+    if (!demoSearch.trim()) return demographicInsights;
+    const q = demoSearch.toLowerCase();
+    return demographicInsights.filter(
+      (d) => d.city.toLowerCase().includes(q) || d.province.toLowerCase().includes(q)
+    );
+  }, [demoSearch]);
+
+  const filteredAlerts = useMemo(() => {
+    if (alertFilter === 'all') return liveAlerts;
+    return liveAlerts.filter((a) => a.category === alertFilter);
+  }, [liveAlerts, alertFilter]);
 
   const selectedTarget = useMemo(() => {
     return immigrationTargets.find((t) => t.year === selectedYear) ?? immigrationTargets[1];
@@ -310,28 +351,43 @@ export default function AnalyticsScreen() {
   );
 
   const renderCostComparator = () => {
-    const availableCities = cityLivingCosts.map((c) => c.city);
     return (
       <View>
         <Text style={[styles.sectionDescription, { color: colors.textSecondary }]}>
-          Compare cost of living across Canadian cities. Data sourced from StatCan CPI, CMHC rental reports, and IMDB immigrant income statistics.
+          Compare cost of living across {cityLivingCosts.length} Canadian cities. Data sourced from StatCan CPI, CMHC rental reports, and IMDB immigrant income statistics.
         </Text>
 
+        <View style={[styles.searchBar, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Search size={18} color={colors.textMuted} />
+          <TextInput
+            style={[styles.searchInput, { color: colors.text }]}
+            placeholder="Search city or province..."
+            placeholderTextColor={colors.textMuted}
+            value={citySearch}
+            onChangeText={setCitySearch}
+          />
+          {citySearch.length > 0 && (
+            <TouchableOpacity onPress={() => setCitySearch('')}>
+              <X size={16} color={colors.textMuted} />
+            </TouchableOpacity>
+          )}
+        </View>
+
         <View style={styles.citySelector}>
-          <Text style={[styles.citySelectorLabel, { color: colors.text }]}>Select cities to compare:</Text>
+          <Text style={[styles.citySelectorLabel, { color: colors.text }]}>Select cities to compare (max 4):</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.citySelectorList}>
-            {availableCities.map((city) => {
-              const isSelected = compareCities.includes(city);
+            {filteredCostCities.map((c) => {
+              const isSelected = compareCities.includes(c.city);
               return (
                 <TouchableOpacity
-                  key={city}
+                  key={c.city}
                   onPress={() => {
                     if (isSelected) {
                       if (compareCities.length > 1) {
-                        setCompareCities(compareCities.filter((c) => c !== city));
+                        setCompareCities(compareCities.filter((ci) => ci !== c.city));
                       }
                     } else if (compareCities.length < 4) {
-                      setCompareCities([...compareCities, city]);
+                      setCompareCities([...compareCities, c.city]);
                     }
                   }}
                   style={[
@@ -343,7 +399,7 @@ export default function AnalyticsScreen() {
                   ]}
                 >
                   <Text style={[styles.cityChipText, { color: isSelected ? '#FFF' : colors.textSecondary }]}>
-                    {city}
+                    {c.city}
                   </Text>
                 </TouchableOpacity>
               );
@@ -481,11 +537,27 @@ export default function AnalyticsScreen() {
   const renderDemographics = () => (
     <View>
       <Text style={[styles.sectionDescription, { color: colors.textSecondary }]}>
-        Find your community. Ethnocultural data from StatCan Census to help reduce isolation and find support networks.
+        Find your community across {demographicInsights.length} Canadian cities. Ethnocultural data from StatCan Census to help reduce isolation and find support networks.
       </Text>
 
+      <View style={[styles.searchBar, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <Search size={18} color={colors.textMuted} />
+        <TextInput
+          style={[styles.searchInput, { color: colors.text }]}
+          placeholder="Search city or province..."
+          placeholderTextColor={colors.textMuted}
+          value={demoSearch}
+          onChangeText={setDemoSearch}
+        />
+        {demoSearch.length > 0 && (
+          <TouchableOpacity onPress={() => setDemoSearch('')}>
+            <X size={16} color={colors.textMuted} />
+          </TouchableOpacity>
+        )}
+      </View>
+
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.citySelectorList}>
-        {demographicInsights.map((d) => (
+        {filteredDemoCities.map((d) => (
           <TouchableOpacity
             key={d.city}
             onPress={() => setSelectedDemoCity(d.city)}
@@ -683,13 +755,52 @@ export default function AnalyticsScreen() {
     </View>
   );
 
+  const ALERT_FILTERS = [
+    { key: 'all', label: 'All' },
+    { key: 'immigration', label: 'Immigration' },
+    { key: 'job_market', label: 'Jobs' },
+    { key: 'policy', label: 'Policy' },
+    { key: 'economic', label: 'Economic' },
+  ];
+
   const renderTrendAlerts = () => (
     <View>
+      <View style={[styles.liveStatusBar, { backgroundColor: isAlertsLive ? colors.success + '15' : colors.warning + '15', borderColor: isAlertsLive ? colors.success + '30' : colors.warning + '30' }]}>
+        {isAlertsLive ? <Wifi size={14} color={colors.success} /> : <WifiOff size={14} color={colors.warning} />}
+        <Text style={[styles.liveStatusText, { color: isAlertsLive ? colors.success : colors.warning }]}>
+          {isAlertsLive ? 'Live — Auto-refreshing every 5 min' : 'Offline — Showing cached alerts'}
+        </Text>
+        {liveAlertsQuery.isRefetching && <ActivityIndicator size="small" color={colors.primary} />}
+        <TouchableOpacity onPress={() => liveAlertsQuery.refetch()} style={styles.refreshButton}>
+          <RefreshCw size={14} color={colors.primary} />
+        </TouchableOpacity>
+      </View>
+
       <Text style={[styles.sectionDescription, { color: colors.textSecondary }]}>
-        Key intelligence from StatCan economic data, IRCC policy updates, and labour market shifts. Stay ahead of changes that affect your immigration journey.
+        Key intelligence from IRCC draws, StatCan data, policy updates, and labour market shifts. Monitoring {filteredAlerts.length} alerts.
       </Text>
 
-      {trendAlerts.map((alert) => (
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={[styles.citySelectorList, { marginBottom: 12 }]}>
+        {ALERT_FILTERS.map((f) => (
+          <TouchableOpacity
+            key={f.key}
+            onPress={() => setAlertFilter(f.key)}
+            style={[
+              styles.cityChip,
+              {
+                backgroundColor: alertFilter === f.key ? colors.primary : colors.surface,
+                borderColor: alertFilter === f.key ? colors.primary : colors.border,
+              },
+            ]}
+          >
+            <Text style={[styles.cityChipText, { color: alertFilter === f.key ? '#FFF' : colors.textSecondary }]}>
+              {f.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
+      {filteredAlerts.map((alert) => (
         <View key={alert.id} style={[styles.alertCard, { backgroundColor: colors.surface, borderColor: colors.border, borderLeftColor: getSeverityColor(alert.severity), borderLeftWidth: 4 }]}>
           <View style={styles.alertHeader}>
             <View style={[styles.severityBadge, { backgroundColor: getSeverityColor(alert.severity) + '15' }]}>
@@ -718,6 +829,14 @@ export default function AnalyticsScreen() {
           </View>
         </View>
       ))}
+
+      {filteredAlerts.length === 0 && (
+        <View style={[styles.emptyState, { backgroundColor: colors.surface }]}>
+          <Bell size={40} color={colors.textMuted} />
+          <Text style={[styles.emptyTitle, { color: colors.text }]}>No alerts in this category</Text>
+          <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>Try a different filter</Text>
+        </View>
+      )}
     </View>
   );
 
@@ -1448,5 +1567,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  liveStatusBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    gap: 8,
+    marginBottom: 12,
+  },
+  liveStatusText: {
+    fontSize: 12,
+    fontWeight: '600' as const,
+    flex: 1,
+  },
+  refreshButton: {
+    padding: 4,
   },
 });
