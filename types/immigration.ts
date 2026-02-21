@@ -116,6 +116,9 @@ export interface PathwayInfo {
   fees: string;
   websiteUrl?: string;
   faqs: { question: string; answer: string }[];
+  pros?: string[];
+  cons?: string[];
+  groundReality?: string[];
 }
 
 export interface ChecklistItem {

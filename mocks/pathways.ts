@@ -45,6 +45,30 @@ export const pathways: PathwayInfo[] = [
       { question: 'How long is my profile valid?', answer: 'Your Express Entry profile is valid for 12 months. If you don\'t receive an ITA, you can resubmit.' },
       { question: 'Can I include my family?', answer: 'Yes, you can include your spouse/partner and dependent children under 22 in your application.' },
     ],
+    pros: [
+      'Fastest PR processing (6-8 months once ITA received)',
+      'No job offer required for FSW — apply from anywhere in the world',
+      'Transparent, points-based system — you know where you stand',
+      'Category-based draws (healthcare, STEM, French, trades) give targeted invitations',
+      'Can include spouse and dependents in one application',
+      'PNP nomination adds 600 CRS points — virtually guarantees an ITA',
+    ],
+    cons: [
+      'Highly competitive — CRS cutoffs have risen significantly (often 480-510+ for general draws)',
+      'Expensive language tests and ECA fees add up before you even apply',
+      'Profile expires after 12 months — must resubmit if no ITA',
+      'Processing delays can extend well beyond the 6-month target',
+      'Single applicants without Canadian experience often struggle to reach cutoffs',
+      'Frequent policy changes can shift cutoffs or draw categories unexpectedly',
+    ],
+    groundReality: [
+      'Reddit consensus: Without Canadian work experience or a PNP nomination, hitting the CRS cutoff is very tough for most candidates. Many report spending 1-2 years improving scores.',
+      'Job market reality: Having PR does not guarantee a job. Many newcomers report months of job searching, especially outside tech and healthcare. Networking and "Canadian experience" bias are real barriers.',
+      'Sector insights: Tech (especially in Toronto/Vancouver), healthcare (nurses, doctors), and skilled trades are the easiest sectors to find work. Finance, marketing, and general management roles are much harder without local connections.',
+      'Cost of living shock: Toronto and Vancouver are extremely expensive. Many Reddit users recommend targeting smaller cities (Calgary, Ottawa, Halifax) for better affordability.',
+      'Language scores matter enormously: CLB 9+ in all bands can add 40-60 extra CRS points. Many successful applicants retake IELTS 2-3 times to max out scores.',
+      'Consultants warning: Reddit and Canadian forums are full of warnings about fraudulent immigration consultants. Only use RCIC-licensed consultants listed on the CICC register.',
+    ],
   },
   {
     id: 'atlantic-immigration',
@@ -87,6 +111,29 @@ export const pathways: PathwayInfo[] = [
       { question: 'Which provinces are part of AIP?', answer: 'New Brunswick, Nova Scotia, Prince Edward Island, and Newfoundland and Labrador.' },
       { question: 'Do I need a job offer?', answer: 'Yes, a job offer from a designated employer in Atlantic Canada is required.' },
     ],
+    pros: [
+      'Lower CRS/points requirements compared to Express Entry',
+      'Employer-driven — designated employers guide you through the process',
+      'Settlement support built into the program via mandatory settlement plan',
+      'Lower cost of living compared to Toronto/Vancouver',
+      'Growing communities actively welcoming newcomers',
+      'No Express Entry profile needed — separate pathway',
+    ],
+    cons: [
+      'Must have a job offer from a designated employer — cannot apply independently',
+      'Fewer employers are designated compared to larger provinces',
+      'Limited job market diversity — fewer opportunities in tech, finance, specialized fields',
+      'Harsh winters, especially in Newfoundland and New Brunswick',
+      'Smaller immigrant communities — may feel isolated initially',
+      'Retention is an issue — many newcomers eventually move to larger cities',
+    ],
+    groundReality: [
+      'Reddit reports: Finding a designated employer is the hardest part. Many applicants cold-email dozens of employers before getting a response. Job Bank and LinkedIn are commonly used.',
+      'Job market: Healthcare workers (nurses, PSWs) and skilled tradespeople are in very high demand. IT jobs exist but are limited compared to Ontario/BC. Hospitality and fish processing are common entry points.',
+      'Retention issue: Forums frequently discuss people using AIP to get PR then moving to Toronto/Vancouver. Provinces are aware but it is not illegal to relocate after getting PR.',
+      'Community support: Settlement organizations in Atlantic Canada are reportedly very helpful and hands-on compared to larger cities where you can get lost in the system.',
+      'Housing: Much more affordable than major cities, but rental vacancies can be tight in smaller towns like Charlottetown or Fredericton.',
+    ],
   },
   {
     id: 'startup-visa',
@@ -128,6 +175,28 @@ export const pathways: PathwayInfo[] = [
       { question: 'Can I apply with partners?', answer: 'Yes, up to 5 people can apply as owners of a qualifying business.' },
       { question: 'What is a designated organization?', answer: 'A business group approved by the Canadian government to invest in or support start-ups — venture capital funds, angel investor groups, or business incubators.' },
     ],
+    pros: [
+      'Provides PR regardless of whether the business succeeds',
+      'Can work on your business while waiting for PR',
+      'No minimum investment amount required (unlike business programs)',
+      'Up to 5 co-founders can apply under one business',
+      'Work permit available while PR processes',
+    ],
+    cons: [
+      'Extremely long processing times (often 3-5 years per Reddit reports)',
+      'Backlog is massive — IRCC has acknowledged significant delays',
+      'Finding a legitimate designated organization willing to support you is very difficult',
+      'Many applicants report paying $50K-$100K+ to incubators for a Letter of Support',
+      'Business viability is questioned at the interview — weak plans get rejected',
+      'High fees overall when you factor in designated org costs + legal fees',
+    ],
+    groundReality: [
+      'Reddit/forum consensus: The Start-Up Visa has become notorious for long processing times. Many applicants have waited 3-4+ years with no decision. The backlog is severe.',
+      'Scam alert: Multiple Reddit threads warn about "pay-to-play" incubators that charge $50K-$100K for a Letter of Support with minimal actual business support. Research thoroughly.',
+      'IRCC crackdown: The government has acknowledged integrity issues with the program and is tightening scrutiny on applications, especially those from certain incubators.',
+      'Success depends on the business plan: Applicants with genuinely innovative ideas and real traction get processed faster. Cookie-cutter business plans are flagged.',
+      'Work permit bridge: You can get a work permit while waiting for PR, which is a significant advantage — but it ties you to the startup.',
+    ],
   },
   {
     id: 'self-employed',
@@ -166,6 +235,26 @@ export const pathways: PathwayInfo[] = [
       { question: 'What qualifies as cultural activities?', answer: 'This includes performing arts, visual arts, creative writing, filmmaking, and similar fields.' },
       { question: 'Do I need a job offer?', answer: 'No, but you must demonstrate ability to be self-employed in Canada.' },
     ],
+    pros: [
+      'No job offer or employer sponsorship needed',
+      'No minimum investment required',
+      'Can bring your family with you',
+      'Good for freelancers, artists, musicians, athletes, and content creators',
+    ],
+    cons: [
+      'Extremely long processing time (24-34 months officially, often longer)',
+      'Very niche — only for cultural activities or athletics',
+      'Interview stage can be unpredictable — subjective assessment of your potential',
+      'Must prove you can sustain yourself financially through self-employment',
+      'Limited to a narrow set of professions',
+    ],
+    groundReality: [
+      'Reddit/forum insight: Processing times are often 3-4+ years in reality, much longer than the official estimate. Patience is essential.',
+      'Portfolio is everything: Successful applicants report having extensive portfolios, press coverage, and documented income from their craft. Hobby-level experience is not enough.',
+      'Interview process: Many applicants are called for an interview where officers deeply probe your business plan. Having a clear, realistic plan for how you will earn a living in Canada is crucial.',
+      'Not well known: This program flies under the radar. Fewer applications means less competition, but also fewer resources and consultants who understand it well.',
+      'Niche job market: Making a living as a self-employed artist or athlete in Canada is genuinely hard. Cost of living is high and the gig economy is competitive.',
+    ],
   },
   {
     id: 'caregiver-program',
@@ -201,6 +290,27 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'Can I bring my family?', answer: 'Yes, you can include your spouse and dependent children in your PR application.' },
       { question: 'How much work experience is needed?', answer: 'Generally 24 months of full-time work experience as a caregiver in Canada.' },
+    ],
+    pros: [
+      'Direct pathway to PR for caregivers already working in Canada',
+      'Lower language requirements (CLB 5) compared to other programs',
+      'Can include family in PR application',
+      'High demand for caregivers across Canada',
+      'Lower education requirements than most economic programs',
+    ],
+    cons: [
+      'Must already be working in Canada as a caregiver — hard to enter from abroad',
+      'Requires 24 months of Canadian work experience — long commitment',
+      'Caregiver work can be isolating (working in private homes)',
+      'Wages are typically low compared to other NOC categories',
+      'Some employers exploit workers on closed work permits — limited ability to switch jobs',
+    ],
+    groundReality: [
+      'Reddit/forum insight: Many caregivers report exploitation by employers, including unpaid overtime, poor living conditions, and threats of termination affecting immigration status.',
+      'Closed work permits are a major issue: You are tied to one employer, making it difficult to leave abusive situations. Advocacy groups recommend documenting everything.',
+      'Wages: Caregiver wages are often at or near minimum wage. Saving money while paying Canadian living expenses is very challenging.',
+      'Demand is real: Canada has a genuine shortage of caregivers for elderly care and childcare. Finding a position is relatively easy compared to other fields.',
+      'Support networks: Filipino and Caribbean caregiver communities are strong in cities like Toronto and Vancouver and provide crucial peer support and information.',
     ],
   },
   {
@@ -241,6 +351,27 @@ export const pathways: PathwayInfo[] = [
       { question: 'What industries are eligible?', answer: 'Meat product manufacturing, greenhouse/nursery/floriculture production, animal production (excluding aquaculture), and mushroom/other farming.' },
       { question: 'What occupations qualify?', answer: 'Retail butchers, industrial butchers, farm supervisors, food processing labourers, general farm workers, and harvesting labourers.' },
     ],
+    pros: [
+      'Low language requirement (CLB 4)',
+      'Lower education requirement (high school equivalent)',
+      'Addresses a real labour shortage — high chance of employer support',
+      'Direct pathway to PR from a temporary work position',
+      'Rural areas often have lower cost of living',
+    ],
+    cons: [
+      'Physically demanding and often unpleasant working conditions (meat processing, farm labour)',
+      'Jobs are typically in rural/remote locations with limited amenities',
+      'Limited career growth within the qualifying occupations',
+      'Requires 1 year of Canadian work experience first — must already be in Canada',
+      'Wages are generally low for the level of physical labour involved',
+    ],
+    groundReality: [
+      'Reddit/forum insight: Meat processing plants (Cargill, Maple Leaf Foods, etc.) are the most common employers. Workers report physically exhausting conditions with high injury rates.',
+      'Location challenges: Most positions are in small rural towns with limited public transit, entertainment, and immigrant services. Having a car is almost essential.',
+      'Weather: Many farms and processing plants are in the prairies — winters are brutal (-30°C or colder) and can be a shock for newcomers from warmer climates.',
+      'Retention: Like AIP, many workers use this as a stepping stone to get PR and then move to cities. Employers are aware and some try to build retention incentives.',
+      'It works: Despite the challenges, this is a legitimate and relatively straightforward path to PR for people willing to do the work. Many families have successfully used this program.',
+    ],
   },
   {
     id: 'francophone-mobility',
@@ -275,6 +406,26 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'Do I need an LMIA?', answer: 'No, this stream is LMIA-exempt, which simplifies the process significantly.' },
       { question: 'Can this lead to PR?', answer: 'Yes, Canadian work experience gained can help with Express Entry or PNP applications.' },
+    ],
+    pros: [
+      'LMIA-exempt — much faster and easier than regular work permit process',
+      'French speakers get significant CRS bonus points in Express Entry',
+      'Can lead directly to PR through Express Entry French-language draws',
+      'Government actively promoting Francophone immigration outside Quebec',
+      'Growing Francophone communities across Canada provide support',
+    ],
+    cons: [
+      'Must be fluent in French — not accessible to everyone',
+      'Job must be outside Quebec — limiting for those who want to live in Montreal',
+      'Employer must understand the LMIA-exempt process — some are unfamiliar',
+      'Not a direct PR pathway — still need to apply through EE or PNP',
+      'French-speaking communities outside Quebec can be small and dispersed',
+    ],
+    groundReality: [
+      'Reddit/forum insight: This is considered one of the best-kept secrets in Canadian immigration. French speakers get massive advantages in Express Entry, with dedicated draws and lower CRS cutoffs (often 380-420).',
+      'Learning French specifically for immigration: Many applicants on Reddit report studying French for 1-2 years to reach TEF/TCF CLB 7+ levels, as the CRS boost is enormous.',
+      'Outside Quebec reality: Francophone communities in Ontario (Ottawa, Toronto), Manitoba (Winnipeg/St. Boniface), and New Brunswick (Moncton) are established. Other areas may have very small French populations.',
+      'Employer awareness: Some employers outside Quebec are not familiar with the Francophone Mobility program. You may need to educate them about the process and its benefits (no LMIA = saves them time and money).',
     ],
   },
 
@@ -321,6 +472,30 @@ export const pathways: PathwayInfo[] = [
       { question: 'How do I get a community recommendation?', answer: 'Each community has its own process. Typically, you apply to the community after securing a job, and they assess your fit.' },
       { question: 'Can my family come with me?', answer: 'Yes, your spouse/partner and dependent children can be included in your PR application.' },
     ],
+    pros: [
+      'Community-driven — local organizations actively help you settle',
+      'Lower competition compared to Express Entry and big-city PNPs',
+      'No Express Entry profile needed',
+      'Affordable cost of living in most participating communities',
+      'Communities genuinely want newcomers — strong support systems',
+      'Now a permanent program (not a pilot) — more stability',
+    ],
+    cons: [
+      'Must commit to living in a small/rural community — limited job market diversity',
+      'Need a genuine job offer in a participating community',
+      'Community recommendation process varies — can be opaque',
+      'Limited public transit in most rural areas — car is almost essential',
+      'Fewer immigrant services, cultural communities, and ethnic food/stores',
+      'Healthcare access can be limited in rural areas (long wait times, fewer specialists)',
+    ],
+    groundReality: [
+      'Reddit/forum insight: The RNIP (predecessor) had mixed reviews. Some communities were very organized and welcoming; others had poor communication and slow processing.',
+      'Job market reality: Most jobs available are in healthcare, trades, food service, and manufacturing. White-collar professional jobs are rare in rural communities.',
+      'Social isolation: Many newcomers on Reddit report feeling isolated in small towns, especially if they are the only immigrant family. This is a real consideration for mental health.',
+      'Winter reality: Most RCIP communities experience harsh Canadian winters. Timmins, Thunder Bay, and Brandon can see -30°C to -40°C regularly.',
+      'Retention pressure: Communities invest in your settlement and expect you to stay. While legally you can move after getting PR, there is social pressure to remain.',
+      'Hidden gem: For those willing to embrace rural life, these communities often offer excellent quality of life — affordable housing, safe neighborhoods, nature access, and tight-knit communities.',
+    ],
   },
   {
     id: 'rcip-north-bay',
@@ -347,6 +522,23 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'What sectors are in demand?', answer: 'Healthcare, skilled trades, manufacturing, IT, and education are key sectors.' },
     ],
+    pros: [
+      'Decent-sized city (~52K) with good amenities for northern Ontario',
+      'Nipissing University and Canadore College bring student energy',
+      'Healthcare and education sectors provide stable employment',
+      'Affordable housing compared to southern Ontario',
+    ],
+    cons: [
+      'Limited job diversity outside healthcare, education, and trades',
+      'Cold winters (average -15°C in January)',
+      'Smaller immigrant community compared to southern Ontario cities',
+      '3.5+ hours from Toronto — somewhat remote',
+    ],
+    groundReality: [
+      'Forum insight: North Bay is considered one of the better RCIP communities due to its size, university, and healthcare infrastructure. Job seekers in nursing and PSW roles report positive experiences.',
+      'Housing: Very affordable by Ontario standards. A family home can be found for $300K-$400K vs $800K+ in the GTA.',
+      'Social life: Outdoor recreation is excellent (lakes, skiing) but nightlife and cultural diversity are limited.',
+    ],
   },
   {
     id: 'rcip-sudbury',
@@ -371,6 +563,24 @@ export const pathways: PathwayInfo[] = [
     fees: 'CAD $1,365 per adult',
     faqs: [
       { question: 'What makes Sudbury unique?', answer: 'Sudbury is a major mining and education hub with a diverse economy and natural beauty.' },
+    ],
+    pros: [
+      'Largest city in northern Ontario (~165K) — more amenities and services',
+      'Strong mining industry with well-paying jobs',
+      'Laurentian University and Cambrian College for education',
+      'Growing healthcare sector',
+      'More diverse community than other northern Ontario cities',
+    ],
+    cons: [
+      'Mining jobs often require specialized training or certifications',
+      'Laurentian University had financial crisis — some programs cut',
+      'Harsh winters and long distances to major cities',
+      'Limited tech and finance job opportunities',
+    ],
+    groundReality: [
+      'Reddit insight: Mining-related jobs (underground miners, geologists, engineers) pay very well ($70K-$120K+) but require specific certifications. Entry-level mining support roles are more accessible.',
+      'Healthcare demand: Sudbury is a regional healthcare hub. Nurses and PSWs are in very high demand with good pay.',
+      'Cost of living: Moderate. Housing is cheaper than southern Ontario but groceries and goods can be pricier due to transportation costs.',
     ],
   },
   {
@@ -397,6 +607,23 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'What industries thrive here?', answer: 'Mining, forestry, healthcare, and retail are major industries in Timmins.' },
     ],
+    pros: [
+      'Mining industry offers high-paying jobs',
+      'Very affordable housing',
+      'Strong community spirit',
+      'Outdoor recreation (fishing, hunting, snowmobiling)',
+    ],
+    cons: [
+      'Very remote — 7+ hours from Toronto',
+      'Extremely cold winters (-25°C to -40°C common)',
+      'Very small city (~42K) with limited amenities',
+      'Few job options outside mining, forestry, and healthcare',
+    ],
+    groundReality: [
+      'Reddit insight: Timmins is a true "northern" experience. People who love outdoor life and don\'t mind isolation often thrive. Those seeking urban amenities will struggle.',
+      'Mining boom/bust: The economy is heavily tied to gold mining. When mines do well, the town prospers. Downturns can mean layoffs.',
+      'Cultural adjustment: Very small immigrant population. Newcomers report being very visible and sometimes facing curiosity (usually friendly) from locals.',
+    ],
   },
   {
     id: 'rcip-sault-ste-marie',
@@ -421,6 +648,23 @@ export const pathways: PathwayInfo[] = [
     fees: 'CAD $1,365 per adult',
     faqs: [
       { question: 'What is the economy based on?', answer: 'Steel manufacturing, healthcare, tourism, alternative energy, and IT.' },
+    ],
+    pros: [
+      'Border city with access to US (Sault Ste. Marie, Michigan)',
+      'Algoma University provides educational opportunities',
+      'Beautiful natural setting on St. Marys River',
+      'Growing alternative energy and IT sectors',
+    ],
+    cons: [
+      'Declining population — limited growth in many sectors',
+      'Steel industry has been volatile (Algoma Steel restructurings)',
+      'Cold winters with heavy lake-effect snow',
+      'Limited job diversity',
+    ],
+    groundReality: [
+      'Forum insight: Sault Ste. Marie has been working hard to attract immigrants but the job market is limited. Healthcare and trades are the safest bets.',
+      'Cross-border advantage: Proximity to the US is unique. Some residents work or shop across the border, but you need proper documentation.',
+      'Community: Small but welcoming. The local immigration organization is reportedly helpful and engaged.',
     ],
   },
   {
@@ -447,6 +691,23 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'What sectors need workers?', answer: 'Healthcare, skilled trades, forestry, transportation, and education.' },
     ],
+    pros: [
+      'Largest city in NW Ontario (~110K) — regional hub with good services',
+      'Lakehead University offers diverse programs',
+      'Major transportation/logistics hub (port city)',
+      'Strong healthcare sector',
+    ],
+    cons: [
+      'Isolated — 15+ hours from Toronto by car',
+      'Very cold and snowy winters',
+      'Limited tech and corporate job opportunities',
+      'High heating costs in winter',
+    ],
+    groundReality: [
+      'Reddit insight: Thunder Bay is polarizing — people either love it or can\'t wait to leave. Those who enjoy nature and outdoor activities find it paradise.',
+      'Job market: Healthcare is the biggest employer (Thunder Bay Regional Health Sciences Centre). Trades and transportation (CN Rail, port) also provide steady work.',
+      'Indigenous community: Thunder Bay has a significant Indigenous population and some racial tension issues have been reported. Newcomers should be aware of local dynamics.',
+    ],
   },
   {
     id: 'rcip-brandon',
@@ -471,6 +732,24 @@ export const pathways: PathwayInfo[] = [
     fees: 'CAD $1,365 per adult',
     faqs: [
       { question: 'What industries are prominent?', answer: 'Agriculture, food processing, manufacturing, and healthcare.' },
+    ],
+    pros: [
+      'Second-largest city in Manitoba — decent size (~50K)',
+      'Brandon University and ACC college',
+      'Strong food processing industry (Maple Leaf Foods)',
+      'Very affordable housing',
+      'Established immigrant community',
+    ],
+    cons: [
+      'Very cold prairie winters (-30°C+)',
+      'Limited job options outside food processing and agriculture',
+      '2+ hours from Winnipeg',
+      'Small-city feel — limited nightlife and entertainment',
+    ],
+    groundReality: [
+      'Reddit insight: Brandon\'s Maple Leaf Foods plant is a major employer of newcomers. Working conditions are reported as tough but the jobs are steady and lead to PR.',
+      'Immigrant community: Brandon has a surprisingly diverse community due to years of immigration programs. Filipino, Ukrainian, and African communities are present.',
+      'Quality of life: Housing is very affordable ($200K-$350K for a family home). Families often report good quality of life once they adjust to winter.',
     ],
   },
   {
@@ -497,6 +776,24 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'What is the community like?', answer: 'Small, close-knit communities with strong Mennonite heritage, affordable cost of living, and welcoming atmosphere.' },
     ],
+    pros: [
+      'Extremely affordable cost of living',
+      'Very welcoming, tight-knit community',
+      'Strong agricultural economy — steady work',
+      'Safe, family-friendly environment',
+    ],
+    cons: [
+      'Very small town (~4K population) — limited services',
+      'Virtually no public transit',
+      '1.5 hours from Winnipeg',
+      'Limited cultural diversity and entertainment',
+      'Must be comfortable with rural, quiet lifestyle',
+    ],
+    groundReality: [
+      'Forum insight: Altona/Rhineland is one of the smallest RCIP communities. It suits people who genuinely want a quiet rural life. Not for anyone expecting urban amenities.',
+      'Community integration: The Mennonite community is very welcoming but culturally distinct. Newcomers who engage with the community are well-received.',
+      'Jobs: Primarily agriculture, food processing (Frito-Lay has a plant nearby), and small businesses. Don\'t expect corporate or tech jobs.',
+    ],
   },
   {
     id: 'rcip-moose-jaw',
@@ -521,6 +818,23 @@ export const pathways: PathwayInfo[] = [
     fees: 'CAD $1,365 per adult',
     faqs: [
       { question: 'What sectors need workers?', answer: 'Healthcare, agriculture, manufacturing, and retail.' },
+    ],
+    pros: [
+      'Affordable housing and cost of living',
+      'Close to Regina (70 km) — access to city amenities',
+      'Historic charm and mineral spas attract tourism',
+      'Safe, family-friendly community',
+    ],
+    cons: [
+      'Small city (~35K) with limited job diversity',
+      'Harsh prairie winters',
+      'Limited immigrant community',
+      'Economy heavily dependent on agriculture',
+    ],
+    groundReality: [
+      'Forum insight: Moose Jaw benefits from proximity to Regina. Some residents commute to Regina for work while enjoying Moose Jaw\'s lower cost of living.',
+      'Tourism sector: The mineral spas and Tunnels of Moose Jaw attract tourists, creating seasonal hospitality jobs.',
+      'Healthcare: Like most Saskatchewan communities, healthcare workers are in high demand.',
     ],
   },
   {
@@ -547,6 +861,23 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'What is the area known for?', answer: 'Agriculture, ranching, and proximity to the Rocky Mountain foothills.' },
     ],
+    pros: [
+      'Beautiful Alberta foothills setting near the Rockies',
+      'Very affordable small-town living',
+      'Close to Lethbridge (1 hour) and Calgary (2 hours)',
+      'Alberta has no provincial sales tax',
+    ],
+    cons: [
+      'Very small town (~4K) — extremely limited services',
+      'Almost no public transit',
+      'Job options mostly limited to agriculture and ranching',
+      'Windy prairie weather with cold winters',
+    ],
+    groundReality: [
+      'Forum insight: Claresholm is a very small town. Suitable only for those genuinely interested in agricultural work and rural Alberta life.',
+      'Alberta advantage: No provincial sales tax and relatively lower income tax makes Alberta financially attractive, even in small towns.',
+      'Car essential: There is essentially no public transit. You must drive for everything, including groceries and medical appointments.',
+    ],
   },
   {
     id: 'rcip-vernon',
@@ -572,6 +903,23 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'What draws newcomers to Vernon?', answer: 'Beautiful Okanagan setting, strong tourism, agriculture, and outdoor recreation industries.' },
     ],
+    pros: [
+      'Stunning Okanagan Valley location — lakes, mountains, wineries',
+      'Mild climate by Canadian standards (warm summers)',
+      'Growing tourism and agriculture industries',
+      'Active outdoor lifestyle community',
+    ],
+    cons: [
+      'Housing is expensive for a small city (Okanagan real estate is pricey)',
+      'Many jobs are seasonal (tourism, agriculture)',
+      'Limited public transit',
+      'Wildfire smoke in summer has become a significant issue',
+    ],
+    groundReality: [
+      'Reddit insight: Vernon and the Okanagan are beautiful but expensive. Housing costs have surged in recent years and wages haven\'t kept up.',
+      'Seasonal work: Tourism and agriculture provide many jobs but they\'re often seasonal. Year-round employment in healthcare and trades is more stable.',
+      'Wildfire smoke: Recent summers have been heavily affected by wildfire smoke, impacting air quality for weeks at a time. This is a growing concern.',
+    ],
   },
   {
     id: 'rcip-west-kootenay',
@@ -596,6 +944,23 @@ export const pathways: PathwayInfo[] = [
     fees: 'CAD $1,365 per adult',
     faqs: [
       { question: 'What is the area like?', answer: 'Mountainous region with strong outdoor culture, mining heritage, and growing tourism and healthcare sectors.' },
+    ],
+    pros: [
+      'Beautiful mountain setting with excellent outdoor recreation',
+      'Lower housing costs than BC\'s coastal cities',
+      'Strong arts and culture scene (especially Nelson)',
+      'Growing healthcare and trades demand',
+    ],
+    cons: [
+      'Remote location — hours from major cities',
+      'Limited job market outside healthcare, trades, and tourism',
+      'Mountain winters with heavy snow',
+      'Small towns with limited services and cultural diversity',
+    ],
+    groundReality: [
+      'Reddit insight: The West Kootenay region attracts people who love outdoor living. Nelson is known as a progressive, artsy town. Trail has the Teck smelter as a major employer.',
+      'Job market: Healthcare (especially in Trail\'s hospital) and trades are the most reliable employment. Tourism provides seasonal work.',
+      'Lifestyle vs. career: Many people accept lower-paying jobs for the incredible lifestyle. If career advancement is your priority, this may not be the right fit.',
     ],
   },
 
@@ -640,6 +1005,30 @@ export const pathways: PathwayInfo[] = [
       { question: 'What is Human Capital Priorities?', answer: 'An Express Entry-aligned stream where Ontario searches the Express Entry pool and issues NOIs to candidates who meet Ontario\'s labour market needs.' },
       { question: 'Do all streams require a job offer?', answer: 'No. Human Capital Priorities, French-Speaking Skilled Worker, and International Student streams do not require a job offer.' },
     ],
+    pros: [
+      'Ontario is Canada\'s economic powerhouse — most job opportunities in the country',
+      'Multiple streams for different profiles (workers, students, entrepreneurs)',
+      'Human Capital Priorities doesn\'t require a job offer',
+      'PNP nomination adds 600 CRS points to Express Entry',
+      'Access to Toronto, Ottawa, and other major cities',
+      'Strong tech, finance, healthcare, and manufacturing sectors',
+    ],
+    cons: [
+      'Extremely competitive — OINP receives far more applications than allocations',
+      'Highest provincial fee ($1,500) among all PNPs',
+      'Toronto and GTA have very high cost of living and housing costs',
+      'NOI/EOI draws are unpredictable and infrequent for some streams',
+      'Employer Job Offer streams require navigating complex employer requirements',
+      'Processing times can be longer than advertised',
+    ],
+    groundReality: [
+      'Reddit consensus: OINP Human Capital Priorities is a lottery — you either get a NOI or you don\'t, and the criteria seem opaque. Many qualified candidates never receive one.',
+      'Job market: Toronto\'s tech sector is strong but competitive. Many newcomers report getting jobs within 2-3 months in tech, but 6-12+ months in non-tech fields like marketing, HR, or general management.',
+      'Housing crisis: Toronto and GTA housing is extremely expensive. A 1-bedroom apartment rents for $2,200-$2,800/month. Many newcomers live with roommates or far from downtown.',
+      'Alternative cities: Ottawa, Waterloo, Hamilton, and London, ON offer lower costs with decent job markets. Reddit frequently recommends these over Toronto for new immigrants.',
+      'Employer Job Offer stream: Some employers charge illegal fees or create exploitative conditions. Only work with legitimate employers and verify their OINP designation.',
+      'International students: Graduating from an Ontario university gives access to the International Student stream, which is one of the more accessible pathways.',
+    ],
   },
   {
     id: 'pnp-bc',
@@ -679,6 +1068,27 @@ export const pathways: PathwayInfo[] = [
       { question: 'What is BC PNP Tech?', answer: 'A fast-tracked stream for tech workers in 29 eligible occupations with expedited processing times.' },
       { question: 'Can international graduates apply?', answer: 'Yes, through the International Graduate and International Post-Graduate streams.' },
     ],
+    pros: [
+      'BC PNP Tech stream offers fast-tracked processing for 29 tech occupations',
+      'Beautiful province with mild coastal climate (Vancouver area)',
+      'Strong tech industry — Vancouver is Canada\'s 2nd largest tech hub',
+      'International Graduate stream available for BC graduates',
+      'Healthcare professionals are in very high demand',
+    ],
+    cons: [
+      'Vancouver has the highest housing costs in Canada (higher than Toronto)',
+      'Most streams require a job offer from a BC employer',
+      'Provincial fee is $1,150 — one of the highest',
+      'Tech stream is competitive — high scores needed for invitations',
+      'Cost of living in the Lower Mainland is extremely high',
+    ],
+    groundReality: [
+      'Reddit consensus: BC PNP Tech is excellent for software developers, DevOps, data scientists, and IT professionals. Processing is genuinely faster than most streams.',
+      'Vancouver housing reality: Expect to pay $2,500-$3,500/month for a 1-bedroom in Vancouver proper. Many tech workers live in Burnaby, Surrey, or New Westminster for lower costs.',
+      'Beyond Vancouver: Kelowna, Victoria, and Kamloops have growing job markets with lower costs. BC PNP gives extra points for jobs outside Metro Vancouver.',
+      'Healthcare sector: Nurses, pharmacists, and allied health professionals report very positive experiences with BC PNP. Hospitals actively recruit internationally.',
+      'Wage vs. cost: Despite good tech salaries ($80K-$130K), the cost of living eats into savings significantly. Many Reddit users note that Calgary or Ottawa offers better purchasing power.',
+    ],
   },
   {
     id: 'pnp-alberta',
@@ -714,6 +1124,28 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'Do I need to be working in Alberta?', answer: 'For the Alberta Opportunity Stream, yes. Other streams may not require current Alberta employment.' },
       { question: 'Is there a Rural Renewal Stream?', answer: 'Yes, the Rural Renewal Stream helps smaller Alberta communities recruit newcomers.' },
+    ],
+    pros: [
+      'No provincial sales tax — significant financial advantage',
+      'Strong oil & gas, agriculture, and growing tech sectors',
+      'Calgary and Edmonton have relatively affordable housing compared to Toronto/Vancouver',
+      'Alberta Opportunity Stream is accessible for those already working in Alberta',
+      'Lower provincial fees ($500) than Ontario and BC',
+      'Growing tech scene in Calgary ("Silicon Prairie")',
+    ],
+    cons: [
+      'Economy is cyclical — heavily tied to oil & gas prices',
+      'Cold winters across the province (-20°C to -35°C)',
+      'Alberta Express Entry stream is competitive and limited',
+      'Job market outside Calgary/Edmonton is limited',
+      'Must already be working in Alberta for most streams',
+    ],
+    groundReality: [
+      'Reddit insight: Alberta\'s job market is boom-or-bust. When oil prices are high, the economy thrives and jobs are plentiful. During downturns, layoffs are widespread.',
+      'Tech growth: Calgary\'s tech sector has grown significantly. Companies like Benevity, Shareworks, and startups are creating opportunities. However, it\'s still smaller than Toronto or Vancouver.',
+      'Cost of living: Calgary offers the best balance of salary vs. cost of living among major Canadian cities according to many Reddit discussions. No PST is a real advantage.',
+      'Edmonton: Often overlooked but has strong healthcare, government, and university-related employment. Housing is even cheaper than Calgary.',
+      'Trades and energy: Welders, pipefitters, electricians, and heavy equipment operators report good wages ($70K-$120K+) but work can be seasonal or in remote camps.',
     ],
   },
   {
@@ -752,6 +1184,28 @@ export const pathways: PathwayInfo[] = [
       { question: 'Can I apply without a job offer?', answer: 'Yes, the International Skilled Worker – Occupation In-Demand sub-category does not require a job offer.' },
       { question: 'What is the SINP points grid?', answer: 'A 100-point grid assessing education, work experience, language, connections to Saskatchewan, and age.' },
     ],
+    pros: [
+      'Can apply without a job offer (International Skilled Worker — Occupation In-Demand)',
+      'Lower processing fees ($350) than most provinces',
+      'Very affordable cost of living — some of the cheapest housing in Canada',
+      'Strong demand for healthcare, trades, and agricultural workers',
+      'Points-based system is transparent',
+      'Growing population and economy',
+    ],
+    cons: [
+      'Extremely cold winters (-30°C to -40°C is common)',
+      'Limited job diversity outside agriculture, mining, and healthcare',
+      'Saskatoon and Regina are the only significant cities',
+      'Flat prairie landscape may not appeal to everyone',
+      'Smaller immigrant communities than in Ontario or BC',
+    ],
+    groundReality: [
+      'Reddit insight: SINP is popular because you can apply without a job offer, but the Occupation In-Demand list changes frequently. Always check the current list before applying.',
+      'Job market: Healthcare (nurses, care aides) and trades (electricians, plumbers, welders) are the easiest fields to find work. Tech and professional services are growing in Saskatoon but still limited.',
+      'Cost of living: A family home in Regina or Saskatoon can cost $300K-$450K — very affordable by Canadian standards. This attracts many immigrants who want to build equity quickly.',
+      'Winter reality: Saskatchewan winters are no joke. Long, dark, and extremely cold. Many newcomers from tropical countries struggle with seasonal depression.',
+      'Community: Saskatoon has a growing immigrant community with good settlement services. The Saskatoon Open Door Society is frequently praised on forums.',
+    ],
   },
   {
     id: 'pnp-manitoba',
@@ -788,6 +1242,28 @@ export const pathways: PathwayInfo[] = [
       { question: 'Do I need a Manitoba connection?', answer: 'For the Overseas stream, yes — either a close relative in Manitoba or previous Manitoba education/work experience is required.' },
       { question: 'Is there a pathway for graduates?', answer: 'Yes, the International Education Stream is for graduates of Manitoba post-secondary institutions.' },
     ],
+    pros: [
+      'One of the most accessible PNPs — connection-based pathway is unique',
+      'Winnipeg has a well-established immigrant community (Filipino, Indian, Ukrainian)',
+      'Very affordable housing and cost of living',
+      'International Education Stream is great for Manitoba graduates',
+      'Strong settlement support services',
+      'Moderate provincial fees ($500)',
+    ],
+    cons: [
+      'Winnipeg has some of the coldest winters in any major Canadian city (-25°C to -40°C)',
+      'Manitoba connection required for Overseas stream — limits applicants',
+      'Job market is smaller than Ontario, BC, or Alberta',
+      'Limited tech sector growth compared to other provinces',
+      'Some areas of Winnipeg have high crime rates',
+    ],
+    groundReality: [
+      'Reddit insight: Manitoba is known as a "stepping stone" province. Many immigrants get PR through MPNP then move to Toronto or Vancouver. Manitoba is aware and trying to improve retention.',
+      'Filipino community: Winnipeg has one of the largest Filipino communities in Canada. Newcomers from the Philippines often find strong community support.',
+      'Job market: Healthcare, manufacturing (New Flyer buses), agriculture, and government are the main employers. Tech is growing slowly with companies like SkipTheDishes (now Just Eat).',
+      'Housing: Winnipeg is one of the most affordable major cities in Canada. You can buy a family home for $250K-$400K in good neighborhoods.',
+      'Winter survival: Multiple Reddit threads discuss surviving Winnipeg winters. Invest in quality winter clothing, block heaters for cars, and prepare for -40°C wind chills.',
+    ],
   },
   {
     id: 'pnp-nova-scotia',
@@ -821,6 +1297,28 @@ export const pathways: PathwayInfo[] = [
     fees: 'No provincial fee + $1,365 (IRCC)',
     faqs: [
       { question: 'What is Labour Market Priorities?', answer: 'An Express Entry-linked stream where Nova Scotia invites candidates from the Express Entry pool who meet their labour market needs.' },
+    ],
+    pros: [
+      'No provincial fee for nomination — saves money',
+      'Labour Market Priorities stream pulls directly from Express Entry pool',
+      'Halifax is a growing, vibrant city with good quality of life',
+      'Strong university presence (Dalhousie, Saint Mary\'s, NSCAD)',
+      'Beautiful maritime scenery and culture',
+      'Growing tech sector in Halifax',
+    ],
+    cons: [
+      'Limited job market outside Halifax',
+      'Wages are generally lower than in Ontario, BC, or Alberta',
+      'Healthcare system is severely strained — long waits for family doctors',
+      'Higher taxes than Alberta',
+      'Cold, wet maritime winters',
+    ],
+    groundReality: [
+      'Reddit insight: Halifax has seen rapid growth in immigration but infrastructure (healthcare, housing) has not kept up. Many newcomers report waiting 1-2+ years for a family doctor.',
+      'Tech sector: Halifax has a small but growing tech scene. Companies like Dash Hudson, Manifold, and several startups offer opportunities. Salaries are lower than Toronto but so is cost of living.',
+      'Housing crunch: Halifax rental market has tightened significantly. Vacancy rates are very low and rents have increased 30-40% in recent years.',
+      'Outside Halifax: Rural Nova Scotia has limited jobs but extremely affordable living. Only consider rural NS if you have a guaranteed job.',
+      'Physician stream: Nova Scotia actively recruits doctors through a dedicated stream. If you\'re a physician, this is one of the best provinces to target.',
     ],
   },
   {
@@ -856,6 +1354,28 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'Is New Brunswick good for francophones?', answer: 'Yes, New Brunswick is Canada\'s only officially bilingual province and actively recruits French-speaking immigrants.' },
     ],
+    pros: [
+      'Only officially bilingual province — great for French speakers',
+      'Low provincial fee ($250)',
+      'Very affordable housing (some of the cheapest in Canada)',
+      'Strategic Initiative stream targets specific labour needs',
+      'Welcoming communities with strong settlement support',
+      'Beautiful natural environment with Bay of Fundy',
+    ],
+    cons: [
+      'Very limited job market — highest unemployment among Maritime provinces',
+      'Low wages compared to national average',
+      'Small cities — Moncton, Saint John, Fredericton are all under 150K',
+      'Limited diversity in employment sectors',
+      'Young people tend to leave for larger cities',
+    ],
+    groundReality: [
+      'Reddit insight: New Brunswick is very affordable but finding well-paying jobs is the main challenge. Healthcare, IT (Moncton has a growing call center/IT sector), and trades are the best bets.',
+      'Moncton advantage: Moncton is bilingual, growing, and has a developing tech/customer service sector. Companies like Assumption Life, Organigram, and various IT firms hire regularly.',
+      'Francophone advantage: French speakers have a significant edge as the province actively recruits them. Bilingual candidates are in high demand.',
+      'Cost of living: Houses in Moncton or Fredericton can be purchased for $200K-$350K. Very attractive for families looking to own a home.',
+      'Retention: Like other Atlantic provinces, NB struggles with retention. Many newcomers use it as a gateway and eventually relocate.',
+    ],
   },
   {
     id: 'pnp-pei',
@@ -890,6 +1410,29 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'Is PEI a good option?', answer: 'PEI has lower competition and a strong community support system for newcomers, making it appealing for many applicants.' },
     ],
+    pros: [
+      'No provincial fee for nomination',
+      'Lower competition than larger province PNPs',
+      'Very welcoming, tight-knit community',
+      'Beautiful island setting',
+      'Good for families seeking a safe, quiet environment',
+      'Strong settlement services relative to province size',
+    ],
+    cons: [
+      'Canada\'s smallest province — very limited job market',
+      'Charlottetown is the only significant city (~40K)',
+      'Limited public transit — car is essential',
+      'Cold maritime winters',
+      'Very small immigrant community',
+      'Healthcare access can be challenging',
+    ],
+    groundReality: [
+      'Reddit insight: PEI is beautiful but tiny. Jobs are concentrated in healthcare, tourism, agriculture (seafood, potatoes), and government. Don\'t expect a diverse job market.',
+      'Housing: Was very affordable but prices have increased significantly. Still cheaper than major cities but no longer the bargain it once was.',
+      'Lifestyle: PEI suits those who want a peaceful, rural lifestyle. If you need urban amenities, nightlife, or cultural diversity, you will feel isolated.',
+      'Tourism economy: Much of PEI\'s economy is seasonal (tourism peaks June-September). Year-round employment is more limited.',
+      'Island life: Some people love it, some feel trapped. The Confederation Bridge connects PEI to New Brunswick, but the nearest major city (Moncton) is 2+ hours away.',
+    ],
   },
   {
     id: 'pnp-newfoundland',
@@ -922,6 +1465,28 @@ export const pathways: PathwayInfo[] = [
     fees: 'CAD $250 (NLPNP) + $1,365 (IRCC)',
     faqs: [
       { question: 'What is the Priority Skills stream?', answer: 'A stream for workers in highly sought-after occupations like healthcare, aquaculture, and tech.' },
+    ],
+    pros: [
+      'Low provincial fee ($250)',
+      'Priority Skills stream fast-tracks in-demand occupations',
+      'Affordable cost of living, especially outside St. John\'s',
+      'Unique culture and incredibly friendly people',
+      'Oil & gas sector offers high-paying jobs',
+      'International Graduate stream for local university alumni',
+    ],
+    cons: [
+      'Very limited job market — economy struggles outside oil & gas',
+      'Remote location — far from the rest of Canada',
+      'Harsh winters with heavy snow and wind',
+      'Small population (~520K for entire province)',
+      'Limited public transit even in St. John\'s',
+    ],
+    groundReality: [
+      'Reddit insight: Newfoundlanders are some of the friendliest people in Canada. Community integration is reportedly easier here than in big cities where people are busy and detached.',
+      'Oil & gas dependency: The economy revolves around offshore oil (Hibernia, Terra Nova). When oil prices drop, the entire province feels it. Diversification is slow.',
+      'Healthcare demand: Like all Atlantic provinces, NL desperately needs healthcare workers. Nurses and doctors have strong job prospects.',
+      'Memorial University: MUN is one of the most affordable universities in Canada for international students. Graduating from MUN opens the International Graduate stream.',
+      'Weather: St. John\'s gets massive snowfalls and strong winds. The saying goes: "If you don\'t like the weather, wait 5 minutes." Be prepared for harsh conditions.',
     ],
   },
   {
@@ -956,6 +1521,29 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'Is Yukon hard to get into?', answer: 'Yukon has lower competition but requires a genuine job offer and intent to live in the territory.' },
     ],
+    pros: [
+      'No territorial fee for nomination',
+      'Very low competition for nominations',
+      'Unique northern lifestyle — aurora borealis, midnight sun, wilderness',
+      'High wages relative to cost of living (northern premium)',
+      'Strong tourism and mining sectors',
+      'Tight-knit, welcoming community in Whitehorse',
+    ],
+    cons: [
+      'Extreme northern climate — dark winters, -30°C to -40°C',
+      'Very remote — Whitehorse is the only significant city (~30K)',
+      'Limited services, shopping, and entertainment',
+      'Flights in/out are expensive',
+      'Must genuinely intend to live there — not a gateway to Vancouver',
+      'Small job market outside government, mining, and tourism',
+    ],
+    groundReality: [
+      'Reddit insight: Yukon is for adventurers. If you love the outdoors, wildlife, and a unique northern experience, it can be amazing. If you need city amenities, you will struggle.',
+      'Government jobs: The Yukon government is the largest employer. Government positions pay well and have good benefits, but are competitive.',
+      'Cost of living: Groceries and goods are expensive (everything is shipped in). However, wages tend to be higher with a "northern premium" and there is no territorial sales tax.',
+      'Community: Whitehorse is small but surprisingly vibrant with arts, music, and a strong outdoor culture. Integration is reportedly easy because everyone knows everyone.',
+      'Seasonal considerations: Summer has 20+ hours of daylight and is beautiful. Winter has only 5-6 hours of daylight and extreme cold. Seasonal affective disorder is common.',
+    ],
   },
   {
     id: 'pnp-nwt',
@@ -988,6 +1576,29 @@ export const pathways: PathwayInfo[] = [
     fees: 'No territorial fee + $1,365 (IRCC)',
     faqs: [
       { question: 'What is life like in NWT?', answer: 'Unique northern lifestyle with long summer days, aurora borealis, outdoor activities, and a small but welcoming community.' },
+    ],
+    pros: [
+      'No territorial fee for nomination',
+      'Very low competition',
+      'High wages with northern living allowances',
+      'Mining sector offers well-paying jobs',
+      'Unique northern experience — aurora borealis, midnight sun',
+      'Strong Indigenous cultural heritage',
+    ],
+    cons: [
+      'Extreme climate — among the coldest inhabited regions on earth',
+      'Very remote — Yellowknife population is only ~20K',
+      'Extremely expensive goods and groceries',
+      'Very limited job market',
+      'Limited healthcare and education facilities',
+      'Flights are the primary connection to the rest of Canada',
+    ],
+    groundReality: [
+      'Reddit insight: NWT is even more remote and extreme than Yukon. Only consider this if you genuinely want a northern frontier lifestyle. It is not a stepping stone — it is a commitment.',
+      'Mining jobs: Diamond mines (Diavik, Ekati) and other mining operations are the backbone of the economy. These often involve fly-in/fly-out rotational work.',
+      'Government employment: Like Yukon, the territorial government is a major employer with good wages and benefits.',
+      'Cost of living: Everything is expensive. A gallon of milk can cost $8-10 in remote communities. Heating costs are very high.',
+      'Cultural experience: Living in NWT exposes you to Indigenous cultures and traditions in a way no other part of Canada does. Many newcomers find this enriching.',
     ],
   },
 
@@ -1029,6 +1640,28 @@ export const pathways: PathwayInfo[] = [
       { question: 'Can I work while studying?', answer: 'Yes, up to 20 hours/week during sessions and full-time during breaks.' },
       { question: 'What is a PGWP?', answer: 'A Post-Graduation Work Permit lets you gain Canadian work experience after graduating from an eligible program.' },
     ],
+    pros: [
+      'Pathway to PGWP and eventually PR through Canadian Experience Class',
+      'Can work part-time (20 hrs/week) during studies',
+      'Canadian education is globally recognized and high quality',
+      'Spouse may be eligible for open work permit',
+      'Builds Canadian network and "Canadian experience"',
+    ],
+    cons: [
+      'Very expensive — international tuition is $20K-$50K+/year depending on program',
+      'Study permit caps and provincial attestation letters (PAL) added in 2024',
+      'PGWP eligibility rules have tightened — not all programs qualify',
+      'No guarantee of PR after graduation — still need to meet CRS or PNP requirements',
+      'Must show proof of $20,635+/year in living expenses (increased from $10K)',
+    ],
+    groundReality: [
+      'Reddit consensus: The study-to-PR pathway has been tightened significantly. Many international students are reporting difficulty getting study permits after the cap was introduced.',
+      'College vs. university: Private colleges (especially diploma mills) are under heavy scrutiny. Stick to public colleges and universities for better PGWP eligibility and job prospects.',
+      'Post-graduation reality: Many Reddit users report struggling to find jobs matching their qualifications after graduation. Survival jobs (retail, food service) are common initially.',
+      'PGWP changes: The government has restricted PGWP eligibility. Not all master\'s programs and college programs qualify anymore. Verify before enrolling.',
+      'Financial burden: Many international students take on significant debt. Be realistic about tuition, living costs, and the time it takes to find professional employment after graduating.',
+      'Best strategy per forums: Study in a field with clear job demand (healthcare, IT, engineering, trades), attend a reputable public institution, and network aggressively during studies.',
+    ],
   },
   {
     id: 'work-permit',
@@ -1066,6 +1699,27 @@ export const pathways: PathwayInfo[] = [
       { question: 'What is an LMIA?', answer: 'A Labour Market Impact Assessment proves no Canadian worker is available for the job.' },
       { question: 'Can my spouse work?', answer: 'Spouses of skilled workers may be eligible for an open work permit.' },
     ],
+    pros: [
+      'Gains Canadian work experience that boosts CRS score for PR',
+      'Spouse may get open work permit (for skilled worker permits)',
+      'Experience Canadian workplace culture firsthand',
+      'Some LMIA-exempt categories simplify the process',
+      'Can lead to CEC eligibility after 1 year',
+    ],
+    cons: [
+      'Employer-specific permits tie you to one employer — hard to switch',
+      'LMIA process is expensive and time-consuming for employers — many won\'t bother',
+      'Temporary status creates uncertainty and stress',
+      'Open work permit policy for spouses has been tightened',
+      'Gaps between permits can create status issues',
+    ],
+    groundReality: [
+      'Reddit insight: Finding an employer willing to do an LMIA is extremely difficult. Most Reddit advice suggests getting to Canada through other means (study permit, IEC) then finding an employer.',
+      'Employer exploitation: Closed work permits leave workers vulnerable. Multiple Reddit threads discuss employers threatening termination, underpaying, or demanding unreasonable hours knowing the worker can\'t easily leave.',
+      'LMIA costs: Employers pay $1,000+ per LMIA application. Many refuse because of cost and paperwork. LMIA-exempt streams (Francophone Mobility, IEC, intra-company transfers) are much easier.',
+      'Spousal work permits: Recent policy changes restrict open work permits for spouses to those whose partner has a high-skilled occupation. This caught many families off guard.',
+      'IEC (International Experience Canada): For citizens of partner countries (ages 18-35), IEC is the easiest way to get a work permit. Check if your country participates.',
+    ],
   },
   {
     id: 'visitor-visa',
@@ -1102,6 +1756,26 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'How long can I stay?', answer: 'Most visitors can stay up to 6 months.' },
       { question: 'Can I extend my stay?', answer: 'Yes, apply at least 30 days before your status expires.' },
+    ],
+    pros: [
+      'Relatively simple application process',
+      'Can explore Canada before committing to immigration',
+      'eTA is very quick and cheap for visa-exempt countries',
+      'Can attend business meetings and conferences',
+      'Can visit family and friends',
+    ],
+    cons: [
+      'Cannot work or study on a visitor visa',
+      'Refusal rates are high for certain nationalities',
+      'Must demonstrate strong ties to home country',
+      'Limited to 6 months per visit',
+      'Applying for status change from within Canada is risky',
+    ],
+    groundReality: [
+      'Reddit insight: Visitor visa refusals are common, especially for applicants from countries with high immigration rates. Strong proof of ties to home country (property, job, family) is essential.',
+      'Do not overstay: Overstaying a visitor visa creates serious issues for any future Canadian immigration applications. Always leave before your status expires or apply for extension early.',
+      'Visitor to worker/student: Converting from visitor to study/work permit from within Canada is possible but complex. It\'s not a recommended strategy as a primary plan.',
+      'Super Visa: For parents/grandparents of Canadian citizens/PRs, the Super Visa allows stays of up to 5 years per visit. Much better than a regular visitor visa for family visits.',
     ],
   },
 
@@ -1142,6 +1816,27 @@ export const pathways: PathwayInfo[] = [
       { question: 'Can I sponsor parents?', answer: 'Yes, through the PGP program. You must meet income requirements for 3 consecutive years.' },
       { question: 'How long is the undertaking?', answer: 'Spouses: 3 years. Parents/grandparents: 20 years. Children: 10 years or until age 25.' },
     ],
+    pros: [
+      'Reunite with family members in Canada',
+      'Spouse sponsorship is relatively straightforward with genuine relationship',
+      'Sponsored person gets PR status directly',
+      'Children under 22 can be included',
+      'No language or education requirements for the sponsored person',
+    ],
+    cons: [
+      'Parent/grandparent sponsorship (PGP) intake opens randomly and fills instantly',
+      'Long processing times — especially for parents (20-24 months)',
+      'Sponsor must meet income requirements for PGP (3 years of minimum income)',
+      'Financial undertaking is legally binding (20 years for parents!)',
+      'Relationship genuineness is heavily scrutinized — interviews are tough',
+    ],
+    groundReality: [
+      'Reddit consensus: Spousal sponsorship works well for genuine relationships but be prepared for invasive questioning. Officers look for signs of marriages of convenience — separate social media accounts, inability to answer questions about each other\'s daily lives, etc.',
+      'PGP lottery: The Parent and Grandparent Program intake is a nightmare. It opens without warning, fills within minutes, and tens of thousands are rejected. Many families wait years for a chance to apply.',
+      'Super Visa alternative: For parents, the Super Visa (allows 5-year stays) is often recommended as an alternative while waiting for PGP.',
+      'Processing delays: Spousal sponsorship from outside Canada is faster (12 months) than inland (12-18 months). But inland applicants can get an open work permit while waiting.',
+      'Undertaking responsibility: The 20-year undertaking for parents means the sponsor is financially responsible even if the relationship breaks down. Consider this carefully.',
+    ],
   },
   {
     id: 'refugee-protection',
@@ -1173,6 +1868,26 @@ export const pathways: PathwayInfo[] = [
     fees: 'No fee for refugee claims',
     faqs: [
       { question: 'Can I work while waiting?', answer: 'Yes, you can apply for a work permit while your claim is being processed.' },
+    ],
+    pros: [
+      'Provides protection for those genuinely fleeing persecution',
+      'No application fee for refugee claims',
+      'Can work while claim is being processed',
+      'Access to healthcare and settlement support',
+      'Canada has a strong tradition of refugee protection',
+    ],
+    cons: [
+      'Processing times can be extremely long (1-3+ years for some claims)',
+      'Living in limbo with uncertain status is psychologically difficult',
+      'Limited access to some services while claim is pending',
+      'Rejection rates vary significantly by country of origin',
+      'Failed claims result in removal orders',
+    ],
+    groundReality: [
+      'Forum insight: The refugee claim process is stressful and uncertain. Having a good immigration lawyer is crucial — legal aid is available in most provinces for refugee claimants.',
+      'IRB hearing: The Immigration and Refugee Board hearing is the most critical step. Preparation with a lawyer, consistent testimony, and strong evidence of persecution are essential.',
+      'Work permits: Refugee claimants can apply for a work permit, which helps with financial stability while waiting. Processing times for work permits have improved.',
+      'Settlement support: Organizations like the Red Cross, UNHCR, and local settlement agencies provide support. Don\'t try to navigate this process alone.',
     ],
   },
   {
@@ -1211,6 +1926,28 @@ export const pathways: PathwayInfo[] = [
     faqs: [
       { question: 'Do I lose my original citizenship?', answer: 'Canada allows dual citizenship. Check if your home country does as well.' },
       { question: 'What is the citizenship test like?', answer: 'A 30-minute test with 20 questions about Canadian history, rights, and responsibilities. Study the "Discover Canada" guide.' },
+    ],
+    pros: [
+      'Canadian passport is one of the most powerful in the world',
+      'Right to vote and run for office',
+      'Cannot be deported (unlike PR holders)',
+      'Canada allows dual citizenship',
+      'Access to government jobs restricted to citizens',
+      'Can pass citizenship to children born abroad',
+    ],
+    cons: [
+      'Must live in Canada for 1,095 days in 5 years — limits time abroad',
+      'Processing times have increased (12-18 months)',
+      'Citizenship test requires studying Canadian history and civics',
+      'Must file Canadian taxes even while abroad (tax obligations)',
+      'Some countries do not allow dual citizenship — may have to renounce',
+    ],
+    groundReality: [
+      'Reddit consensus: The citizenship test is not difficult if you study the "Discover Canada" guide. Most people pass on the first try. Focus on Canadian history, government structure, and rights.',
+      'Physical presence tracking: Use a physical presence calculator and keep all travel records. IRCC can ask for proof of your time in Canada — border crossing records, stamps, boarding passes.',
+      'Processing delays: Many applicants on Reddit report waiting 12-18+ months after applying. The ceremony (oath-taking) is the final step and is reportedly a moving experience.',
+      'Tax implications: As a Canadian citizen, you have tax obligations even when living abroad. If you plan to live outside Canada, consult a tax professional about your obligations.',
+      'Ceremony: The citizenship ceremony is often described as emotional and meaningful. Many newcomers post their ceremony photos as one of the proudest moments of their immigration journey.',
     ],
   },
 ];

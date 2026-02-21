@@ -32,6 +32,10 @@ import {
   MapPinHouse,
   Shield,
   Award,
+  ThumbsUp,
+  ThumbsDown,
+  AlertTriangle,
+  CircleDot,
 } from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import CollapsibleSection from '@/components/CollapsibleSection';
@@ -171,6 +175,52 @@ function PathwayCard({ pathway }: { pathway: PathwayInfo }) {
           </CollapsibleSection>
 
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
+
+          {pathway.pros && pathway.pros.length > 0 && (
+            <>
+              <CollapsibleSection title="Pros">
+                {pathway.pros.map((item, idx) => (
+                  <View key={idx} style={styles.listItem}>
+                    <ThumbsUp size={14} color="#16A34A" />
+                    <Text style={[styles.listText, { color: colors.text }]}>{item}</Text>
+                  </View>
+                ))}
+              </CollapsibleSection>
+              <View style={[styles.divider, { backgroundColor: colors.border }]} />
+            </>
+          )}
+
+          {pathway.cons && pathway.cons.length > 0 && (
+            <>
+              <CollapsibleSection title="Cons">
+                {pathway.cons.map((item, idx) => (
+                  <View key={idx} style={styles.listItem}>
+                    <ThumbsDown size={14} color="#DC2626" />
+                    <Text style={[styles.listText, { color: colors.text }]}>{item}</Text>
+                  </View>
+                ))}
+              </CollapsibleSection>
+              <View style={[styles.divider, { backgroundColor: colors.border }]} />
+            </>
+          )}
+
+          {pathway.groundReality && pathway.groundReality.length > 0 && (
+            <>
+              <CollapsibleSection title="Ground Reality & Things to Look Out For">
+                <View style={[styles.groundRealityBanner, { backgroundColor: '#F59E0B' + '15', borderColor: '#F59E0B' + '30' }]}>
+                  <AlertTriangle size={14} color="#D97706" />
+                  <Text style={[styles.groundRealityBannerText, { color: '#D97706' }]}>Based on real experiences from Reddit, forums, and immigration communities</Text>
+                </View>
+                {pathway.groundReality.map((item, idx) => (
+                  <View key={idx} style={styles.groundRealityItem}>
+                    <CircleDot size={14} color="#D97706" style={{ marginTop: 2 }} />
+                    <Text style={[styles.groundRealityText, { color: colors.text }]}>{item}</Text>
+                  </View>
+                ))}
+              </CollapsibleSection>
+              <View style={[styles.divider, { backgroundColor: colors.border }]} />
+            </>
+          )}
 
           <CollapsibleSection title="FAQs">
             {pathway.faqs.map((faq, idx) => (
@@ -485,6 +535,32 @@ const styles = StyleSheet.create({
   officialLinkText: {
     fontSize: 14,
     fontWeight: '600' as const,
+  },
+  groundRealityBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  groundRealityBannerText: {
+    fontSize: 12,
+    fontWeight: '500' as const,
+    flex: 1,
+    lineHeight: 16,
+  },
+  groundRealityItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    marginBottom: 12,
+  },
+  groundRealityText: {
+    fontSize: 13,
+    flex: 1,
+    lineHeight: 20,
   },
   infoBox: {
     borderRadius: 16,
