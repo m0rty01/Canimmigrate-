@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { LayoutDashboard, Calculator, Map, Newspaper, Settings } from 'lucide-react-native';
+import { LayoutDashboard, Calculator, Map, Newspaper, Settings, Route } from 'lucide-react-native';
 import React from 'react';
 import { useTheme } from '@/providers/ThemeProvider';
 
@@ -42,6 +42,13 @@ export default function TabLayout() {
         options={{
           title: 'Pathways',
           tabBarIcon: ({ color, size }) => <Map size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="process"
+        options={{
+          title: 'Process',
+          tabBarIcon: ({ color, size }) => <Route size={size} color={color} />,
         }}
       />
       <Tabs.Screen
