@@ -170,24 +170,26 @@ export default function SettingsScreen() {
         />
       </View>
 
-      {/* Contact Developer */}
+      {/* Contact Us — prominent dedicated page */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Contact Developer</Text>
-        <View style={[styles.contactCard, { backgroundColor: colors.surface }]}>
+        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Contact</Text>
+        <TouchableOpacity
+          style={[styles.contactHighlight, { backgroundColor: colors.surface, borderColor: colors.success }]}
+          onPress={() => router.push('/settings/contact' as any)}
+          activeOpacity={0.8}
+        >
           <View style={[styles.contactIconCircle, { backgroundColor: colors.successLight }]}>
             <Mail size={22} color={colors.success} />
           </View>
           <View style={styles.contactInfo}>
-            <Text style={[styles.contactTitle, { color: colors.text }]}>Questions or Feedback?</Text>
+            <Text style={[styles.contactTitle, { color: colors.text }]}>Contact Us</Text>
             <Text style={[styles.contactSubtitle, { color: colors.textSecondary }]}>
-              We respond within a few days.
+              Feedback, bug reports, or questions
             </Text>
-            <TouchableOpacity onPress={handleEmailContact} activeOpacity={0.7} style={styles.emailRow}>
-              <Mail size={13} color={colors.primary} />
-              <Text style={[styles.emailText, { color: colors.primary }]}>{DEVELOPER_EMAIL}</Text>
-            </TouchableOpacity>
+            <Text style={[styles.emailText, { color: colors.primary }]}>{DEVELOPER_EMAIL}</Text>
           </View>
-        </View>
+          <ChevronRight size={20} color={colors.textMuted} />
+        </TouchableOpacity>
         <SettingsRow
           colors={colors}
           icon={<MessageSquare size={20} color={colors.primary} />}
@@ -417,6 +419,20 @@ const styles = StyleSheet.create({
   rowSubtitle: {
     fontSize: 12,
     marginTop: 2,
+  },
+  contactHighlight: {
+    flexDirection: 'row' as const,
+    alignItems: 'center',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 8,
+    gap: 14,
+    borderWidth: 1.5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 1,
   },
   contactCard: {
     flexDirection: 'row',
