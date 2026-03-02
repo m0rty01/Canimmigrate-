@@ -38,6 +38,7 @@ export default function DashboardScreen() {
     checklistProgress,
     toggleChecklistItem,
     onboardingDone,
+    disclaimerAccepted,
     isLoading,
   } = useUser();
 
@@ -53,10 +54,13 @@ export default function DashboardScreen() {
   const scoreAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (!onboardingDone && !isLoading) {
+    if (isLoading) return;
+    if (!disclaimerAccepted) {
+      router.push('/disclaimer' as any);
+    } else if (!onboardingDone) {
       router.push('/onboarding' as any);
     }
-  }, [onboardingDone, isLoading]);
+  }, [disclaimerAccepted, onboardingDone, isLoading]);
 
   useEffect(() => {
     Animated.timing(scoreAnim, {

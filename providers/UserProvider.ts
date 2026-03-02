@@ -18,6 +18,7 @@ const PROFILE_KEY = 'canimmigrate_profile';
 const SCENARIOS_KEY = 'canimmigrate_scenarios';
 const CHECKLIST_KEY = 'canimmigrate_checklist';
 const ONBOARDING_KEY = 'canimmigrate_onboarding';
+const DISCLAIMER_KEY = 'canimmigrate_disclaimer';
 
 export const [UserProvider, useUser] = createContextHook(() => {
   const queryClient = useQueryClient();
@@ -25,6 +26,7 @@ export const [UserProvider, useUser] = createContextHook(() => {
   const [scenarios, setScenarios] = useState<CRSScenario[]>([]);
   const [checklist, setChecklist] = useState<ChecklistItem[]>(defaultChecklist);
   const [onboardingDone, setOnboardingDone] = useState<boolean>(false);
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState<boolean>(false);
 
   const profileQuery = useQuery({
     queryKey: ['user-profile'],
@@ -58,6 +60,14 @@ export const [UserProvider, useUser] = createContextHook(() => {
     },
   });
 
+  const disclaimerQuery = useQuery({
+    queryKey: ['disclaimer'],
+    queryFn: async () => {
+      const stored = await AsyncStorage.getItem(DISCLAIMER_KEY);
+      return stored === 'true';
+    },
+  });
+
   useEffect(() => {
     if (profileQuery.data) {
       setProfile(profileQuery.data);
@@ -81,6 +91,12 @@ export const [UserProvider, useUser] = createContextHook(() => {
       setOnboardingDone(onboardingQuery.data);
     }
   }, [onboardingQuery.data]);
+
+  useEffect(() => {
+    if (disclaimerQuery.data !== undefined) {
+      setDisclaimerAccepted(disclaimerQuery.data);
+    }
+  }, [disclaimerQuery.data]);
 
   const profileMutation = useMutation({
     mutationFn: async (newProfile: UserProfile) => {
@@ -124,30 +140,49 @@ export const [UserProvider, useUser] = createContextHook(() => {
     },
   });
 
-  const updateProfile = useCallback((newProfile: UserProfile) => {
-    profileMutation.mutate(newProfile);
-  }, [profileMutation]);
+  const disclaimerMutation = useMutation({
+    mutationFn: async () => {
+      await AsyncStorage.setItem(DISCLAIMER_KEY, 'true');
+      return true;
+    },
+    onSuccess: () => {
+      setDisclaimerAccepted(true);
+    },
+  });
 
+  const { mutate: mutateProfile } = profileMutation;
+  const updateProfile = useCallback((newProfile: UserProfile) => {
+    mutateProfile(newProfile);
+  }, [mutateProfile]);
+
+  const { mutate: mutateScenario } = scenarioMutation;
   const saveScenario = useCallback((scenario: CRSScenario) => {
     const updated = [...scenarios, scenario];
-    scenarioMutation.mutate(updated);
-  }, [scenarios, scenarioMutation]);
+    mutateScenario(updated);
+  }, [scenarios, mutateScenario]);
 
   const deleteScenario = useCallback((id: string) => {
     const updated = scenarios.filter((s) => s.id !== id);
-    scenarioMutation.mutate(updated);
-  }, [scenarios, scenarioMutation]);
+    mutateScenario(updated);
+  }, [scenarios, mutateScenario]);
 
+  const { mutate: mutateChecklist } = checklistMutation;
   const toggleChecklistItem = useCallback((id: string) => {
     const updated = checklist.map((item) =>
       item.id === id ? { ...item, completed: !item.completed } : item
     );
-    checklistMutation.mutate(updated);
-  }, [checklist, checklistMutation]);
+    mutateChecklist(updated);
+  }, [checklist, mutateChecklist]);
 
+  const { mutate: mutateOnboarding } = onboardingMutation;
   const completeOnboarding = useCallback(() => {
-    onboardingMutation.mutate();
-  }, [onboardingMutation]);
+    mutateOnboarding();
+  }, [mutateOnboarding]);
+
+  const { mutate: mutateDisclaimer } = disclaimerMutation;
+  const acceptDisclaimer = useCallback(() => {
+    mutateDisclaimer();
+  }, [mutateDisclaimer]);
 
   const crsBreakdown: ScoreBreakdown = useMemo(() => {
     if (!profile.profileCompleted) {
@@ -165,13 +200,14 @@ export const [UserProvider, useUser] = createContextHook(() => {
     return { completed, total: checklist.length, percentage: Math.round((completed / checklist.length) * 100) };
   }, [checklist]);
 
-  const isLoading = profileQuery.isLoading || scenariosQuery.isLoading || onboardingQuery.isLoading;
+  const isLoading = profileQuery.isLoading || scenariosQuery.isLoading || onboardingQuery.isLoading || disclaimerQuery.isLoading;
 
   return {
     profile,
     scenarios,
     checklist,
     onboardingDone,
+    disclaimerAccepted,
     crsBreakdown,
     tips,
     checklistProgress,
@@ -181,5 +217,6 @@ export const [UserProvider, useUser] = createContextHook(() => {
     deleteScenario,
     toggleChecklistItem,
     completeOnboarding,
+    acceptDisclaimer,
   };
 });

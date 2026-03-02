@@ -22,6 +22,10 @@ function RootLayoutNav() {
         name="ai-chat"
         options={{ headerShown: false, presentation: 'modal' }}
       />
+      <Stack.Screen
+        name="disclaimer"
+        options={{ headerShown: false, presentation: 'fullScreenModal', gestureEnabled: false }}
+      />
     </Stack>
   );
 }

@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
-  User,
   Bell,
   Shield,
   Info,
@@ -190,32 +189,39 @@ export default function SettingsScreen() {
         />
       </View>
 
+      <View style={[styles.disclaimerBanner, { backgroundColor: isDark ? '#2A1A0A' : '#FFF8F0', borderColor: '#E8830A' }]}>
+        <Info size={18} color="#E8830A" />
+        <Text style={[styles.disclaimerBannerText, { color: isDark ? '#F5A642' : '#8B4A00' }]}>
+          CanImmigrate is an{' '}
+          <Text style={styles.disclaimerBold}>independent, unofficial informational app</Text>.
+          {' '}Not affiliated with, endorsed by, or representing the Government of Canada, IRCC, or any Canadian government agency.
+        </Text>
+      </View>
+
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Legal</Text>
+        <SettingsRow
+          colors={colors}
+          icon={<Info size={20} color="#E8830A" />}
+          title="About & Disclaimer"
+          subtitle="Independent app — not a government service"
+          onPress={() => router.push('/disclaimer' as any)}
+        />
         <SettingsRow
           colors={colors}
           icon={<Shield size={20} color={colors.textSecondary} />}
           title="Privacy Policy"
           onPress={() => Alert.alert(
             'Privacy Policy',
-            'CanImmigrate+ respects your privacy. All profile data is stored locally on your device. We do not collect, transmit, or store any personal information on external servers. Your CRS calculations and saved scenarios remain private and accessible only to you.'
-          )}
-        />
-        <SettingsRow
-          colors={colors}
-          icon={<Info size={20} color={colors.textSecondary} />}
-          title="Disclaimer"
-          onPress={() => Alert.alert(
-            'Disclaimer',
-            'CanImmigrate+ is an informational tool only and does not constitute official legal guidance. Immigration rules and CRS scoring criteria may change. Always verify information with IRCC (Immigration, Refugees and Citizenship Canada) or consult a licensed immigration consultant (RCIC) for personalized advice.'
+            'CanImmigrate respects your privacy. All profile data is stored locally on your device. We do not collect, transmit, or store any personal information on external servers. Your CRS calculations and saved scenarios remain private and accessible only to you.'
           )}
         />
       </View>
 
       <View style={styles.footer}>
-        <Text style={[styles.footerText, { color: colors.textMuted }]}>CanImmigrate+ v1.0.0</Text>
+        <Text style={[styles.footerText, { color: colors.textMuted }]}>CanImmigrate v1.0.0</Text>
         <Text style={[styles.footerSubtext, { color: colors.textMuted }]}>
-          Not affiliated with the Government of Canada
+          Independent app — Not affiliated with the Government of Canada, IRCC, or any government agency
         </Text>
       </View>
 
@@ -331,5 +337,24 @@ const styles = StyleSheet.create({
   footerSubtext: {
     fontSize: 11,
     marginTop: 4,
+    textAlign: 'center' as const,
+    lineHeight: 16,
+  },
+  disclaimerBanner: {
+    borderRadius: 14,
+    borderWidth: 1.5,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    marginBottom: 4,
+  },
+  disclaimerBannerText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  disclaimerBold: {
+    fontWeight: '700' as const,
   },
 });
