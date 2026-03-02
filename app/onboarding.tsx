@@ -14,8 +14,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import {
   Calculator,
   Map,
-  Bell,
+  Shield,
   ArrowRight,
+  AlertTriangle,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '@/providers/ThemeProvider';
@@ -30,6 +31,7 @@ interface OnboardingSlide {
   description: string;
   icon: React.ComponentType<{ size: number; color: string }>;
   gradientColors: [string, string];
+  disclaimer?: string;
 }
 
 export default function OnboardingScreen() {
@@ -44,27 +46,38 @@ export default function OnboardingScreen() {
   const SLIDES: OnboardingSlide[] = [
     {
       id: '1',
-      emoji: '🍁',
-      title: 'Welcome to\nCanImmigrate+',
-      description: 'Your comprehensive companion for navigating the Canadian immigration journey with confidence.',
-      icon: Map,
-      gradientColors: [colors.primary, colors.primaryDark],
+      emoji: '⚠️',
+      title: 'Important\nDisclaimer',
+      description: 'CanImmigrate is an INDEPENDENT, UNOFFICIAL informational reference app. It is NOT affiliated with, endorsed by, or authorized by IRCC, the Government of Canada, or any government body. This app does NOT provide official advice or facilitate applications.',
+      icon: AlertTriangle,
+      gradientColors: ['#B34700', '#8B3300'],
+      disclaimer: 'Always verify information on canada.ca',
     },
     {
       id: '2',
-      emoji: '📊',
-      title: 'Smart CRS\nCalculator',
-      description: 'Calculate your Comprehensive Ranking System score, simulate what-if scenarios, and discover ways to improve.',
+      emoji: '🍁',
+      title: 'CRS Score\nEstimator',
+      description: 'Estimate your Comprehensive Ranking System score based on the publicly available IRCC formula. For reference only — not an official score. Always check ircc.canada.ca for your actual profile.',
       icon: Calculator,
-      gradientColors: [colors.secondary, isDark ? '#0D1B2E' : '#152A45'],
+      gradientColors: [colors.primary, colors.primaryDark],
+      disclaimer: 'Estimation only — not an official CRS score',
     },
     {
       id: '3',
-      emoji: '🔔',
-      title: 'Stay Informed\n& Prepared',
-      description: 'Get the latest draw results, policy updates, and personalized tips to keep your immigration plan on track.',
-      icon: Bell,
-      gradientColors: ['#1B6B4A', colors.success],
+      emoji: '📋',
+      title: 'General\nReference Guides',
+      description: 'Explore general overviews of Canadian immigration pathways derived from publicly available canada.ca sources. Content is for research purposes only — consult a licensed RCIC for personalized advice.',
+      icon: Map,
+      gradientColors: ['#1B6B4A', '#155236'],
+      disclaimer: 'General info only — consult a licensed RCIC',
+    },
+    {
+      id: '4',
+      emoji: '🔒',
+      title: 'Your Privacy\nMatters',
+      description: 'All your data stays on your device. We do not collect, transmit, or store any personal information on external servers. Your calculations and checklist are private and local only.',
+      icon: Shield,
+      gradientColors: [isDark ? '#1A2035' : '#2C3E50', isDark ? '#0D1525' : '#1A252F'],
     },
   ];
 
@@ -101,7 +114,12 @@ export default function OnboardingScreen() {
           <View style={styles.iconCircle}>
             <Text style={styles.emoji}>{item.emoji}</Text>
           </View>
-          <IconComp size={48} color="rgba(255,255,255,0.2)" />
+          <IconComp size={44} color="rgba(255,255,255,0.2)" />
+          {item.disclaimer && (
+            <View style={styles.slideDisclaimerBadge}>
+              <Text style={styles.slideDisclaimerText}>{item.disclaimer}</Text>
+            </View>
+          )}
         </LinearGradient>
         <View style={styles.slideContent}>
           <Text style={[styles.slideTitle, { color: colors.text }]}>{item.title}</Text>
@@ -116,7 +134,10 @@ export default function OnboardingScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom, backgroundColor: colors.background }]}>
       <View style={styles.topBar}>
-        <View style={styles.topBarSpace} />
+        <View style={[styles.unofficialBadge, { backgroundColor: isDark ? '#2A1A0A' : '#FFF3E0', borderColor: '#E8830A' }]}>
+          <AlertTriangle size={11} color="#E8830A" />
+          <Text style={styles.unofficialBadgeText}>UNOFFICIAL APP — NOT IRCC</Text>
+        </View>
         {!isLast && (
           <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
             <Text style={[styles.skipText, { color: colors.textSecondary }]}>Skip</Text>
@@ -204,8 +225,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
   },
-  topBarSpace: {
-    width: 60,
+  unofficialBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
+    borderWidth: 1.5,
+  },
+  unofficialBadgeText: {
+    fontSize: 9,
+    fontWeight: '800' as const,
+    letterSpacing: 0.6,
+    color: '#E8830A',
   },
   skipButton: {
     paddingHorizontal: 16,
@@ -222,40 +255,55 @@ const styles = StyleSheet.create({
   },
   slideGradient: {
     width: SCREEN_WIDTH - 64,
-    height: 280,
+    height: 260,
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 40,
+    marginBottom: 32,
+    gap: 8,
+    paddingBottom: 12,
   },
   iconCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
     backgroundColor: 'rgba(255,255,255,0.15)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   emoji: {
-    fontSize: 48,
+    fontSize: 44,
+  },
+  slideDisclaimerBadge: {
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    marginTop: 4,
+  },
+  slideDisclaimerText: {
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: 11,
+    fontWeight: '600' as const,
+    textAlign: 'center' as const,
   },
   slideContent: {
     alignItems: 'center',
     paddingHorizontal: 8,
   },
   slideTitle: {
-    fontSize: 32,
+    fontSize: 30,
     fontWeight: '800' as const,
     textAlign: 'center' as const,
     letterSpacing: -0.5,
-    lineHeight: 38,
-    marginBottom: 16,
+    lineHeight: 36,
+    marginBottom: 14,
   },
   slideDescription: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center' as const,
-    lineHeight: 24,
+    lineHeight: 23,
   },
   bottomSection: {
     paddingHorizontal: 32,

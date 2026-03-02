@@ -10,17 +10,20 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Bell,
   Shield,
   Info,
   ChevronRight,
-  FileText,
   ExternalLink,
   Mail,
   Moon,
   Sun,
   Smartphone,
+  AlertTriangle,
+  MessageSquare,
+  Globe,
 } from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser } from '@/providers/UserProvider';
@@ -62,18 +65,33 @@ const THEME_OPTIONS: { key: ThemeMode; label: string; icon: React.ComponentType<
 
 export default function SettingsScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { profile } = useUser();
   const { colors, themeMode, setTheme, isDark } = useTheme();
-  const [drawNotifications, setDrawNotifications] = useState(true);
-  const [policyNotifications, setPolicyNotifications] = useState(true);
   const [reminderNotifications, setReminderNotifications] = useState(false);
+
+  const DEVELOPER_EMAIL = 'ravijha01.97@gmail.com';
+
+  const handleEmailContact = () => {
+    Linking.openURL(`mailto:${DEVELOPER_EMAIL}?subject=CanImmigrate App Feedback`).catch(() => {
+      Alert.alert('Email', `Contact us at: ${DEVELOPER_EMAIL}`);
+    });
+  };
 
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
-      contentContainerStyle={styles.scrollContent}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + 24 }]}
       showsVerticalScrollIndicator={false}
     >
+      {/* Top disclaimer banner */}
+      <View style={[styles.topDisclaimerBanner, { backgroundColor: isDark ? '#2A1200' : '#FFF3E0', borderColor: '#E8830A' }]}>
+        <AlertTriangle size={13} color="#E8830A" />
+        <Text style={[styles.topDisclaimerText, { color: isDark ? '#F5A642' : '#8B4A00' }]}>
+          Unofficial App — Not IRCC / Gov of Canada
+        </Text>
+      </View>
+
       <TouchableOpacity
         style={[styles.profileCard, { backgroundColor: colors.surface }]}
         onPress={() => router.push('/settings/profile' as any)}
@@ -93,6 +111,7 @@ export default function SettingsScreen() {
         <ChevronRight size={20} color={colors.textMuted} />
       </TouchableOpacity>
 
+      {/* Appearance */}
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Appearance</Text>
         <View style={[styles.themeSelector, { backgroundColor: colors.surface }]}>
@@ -126,41 +145,20 @@ export default function SettingsScreen() {
         </View>
       </View>
 
+      {/* Notifications — reminders only */}
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Notifications</Text>
-        <SettingsRow
-          colors={colors}
-          icon={<Bell size={20} color={colors.primary} />}
-          title="Express Entry Draws"
-          subtitle="Get notified when new draws occur"
-          rightElement={
-            <Switch
-              value={drawNotifications}
-              onValueChange={setDrawNotifications}
-              trackColor={{ false: colors.border, true: colors.primaryLight }}
-              thumbColor={drawNotifications ? colors.primary : '#f4f3f4'}
-            />
-          }
-        />
-        <SettingsRow
-          colors={colors}
-          icon={<FileText size={20} color={colors.info} />}
-          title="Policy Changes"
-          subtitle="Important immigration policy updates"
-          rightElement={
-            <Switch
-              value={policyNotifications}
-              onValueChange={setPolicyNotifications}
-              trackColor={{ false: colors.border, true: colors.primaryLight }}
-              thumbColor={policyNotifications ? colors.primary : '#f4f3f4'}
-            />
-          }
-        />
+        <View style={[styles.notifNote, { backgroundColor: isDark ? '#0D1A0D' : '#F1F8F1', borderColor: colors.border }]}>
+          <Info size={13} color={colors.textMuted} />
+          <Text style={[styles.notifNoteText, { color: colors.textMuted }]}>
+            Reminders only — this app does not push draw results or policy updates
+          </Text>
+        </View>
         <SettingsRow
           colors={colors}
           icon={<Bell size={20} color={colors.warning} />}
-          title="Reminders"
-          subtitle="Document expiry and deadline reminders"
+          title="General Reminders"
+          subtitle="Remind yourself to check official sites for updates"
           rightElement={
             <Switch
               value={reminderNotifications}
@@ -172,38 +170,66 @@ export default function SettingsScreen() {
         />
       </View>
 
+      {/* Contact Developer */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Support</Text>
+        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Contact Developer</Text>
+        <View style={[styles.contactCard, { backgroundColor: colors.surface }]}>
+          <View style={[styles.contactIconCircle, { backgroundColor: colors.successLight }]}>
+            <Mail size={22} color={colors.success} />
+          </View>
+          <View style={styles.contactInfo}>
+            <Text style={[styles.contactTitle, { color: colors.text }]}>Questions or Feedback?</Text>
+            <Text style={[styles.contactSubtitle, { color: colors.textSecondary }]}>
+              We respond within a few days.
+            </Text>
+            <TouchableOpacity onPress={handleEmailContact} activeOpacity={0.7} style={styles.emailRow}>
+              <Mail size={13} color={colors.primary} />
+              <Text style={[styles.emailText, { color: colors.primary }]}>{DEVELOPER_EMAIL}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         <SettingsRow
           colors={colors}
-          icon={<Mail size={20} color={colors.success} />}
-          title="Contact Us"
-          subtitle="Got questions / suggestions / need help with anything else? email me!"
-          onPress={() => Linking.openURL('mailto:ravijha97.01@gmail.com')}
+          icon={<MessageSquare size={20} color={colors.primary} />}
+          title="Send Feedback / Report Issue"
+          subtitle={`Email: ${DEVELOPER_EMAIL}`}
+          onPress={handleEmailContact}
         />
+      </View>
+
+      {/* Official Resources */}
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Official Resources</Text>
         <SettingsRow
           colors={colors}
-          icon={<ExternalLink size={20} color={colors.info} />}
+          icon={<Globe size={20} color={colors.info} />}
           title="IRCC Official Website"
+          subtitle="canada.ca/en/immigration-refugees-citizenship"
           onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship.html')}
         />
+        <SettingsRow
+          colors={colors}
+          icon={<ExternalLink size={20} color={colors.success} />}
+          title="Express Entry Draws (Official)"
+          subtitle="Latest draw results on canada.ca"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/submit-profile/rounds-invitations.html')}
+        />
+        <SettingsRow
+          colors={colors}
+          icon={<ExternalLink size={20} color={colors.textSecondary} />}
+          title="Statistics Canada"
+          subtitle="statcan.gc.ca"
+          onPress={() => Linking.openURL('https://www.statcan.gc.ca')}
+        />
       </View>
 
-      <View style={[styles.disclaimerBanner, { backgroundColor: isDark ? '#2A1A0A' : '#FFF8F0', borderColor: '#E8830A' }]}>
-        <Info size={18} color="#E8830A" />
-        <Text style={[styles.disclaimerBannerText, { color: isDark ? '#F5A642' : '#8B4A00' }]}>
-          CanImmigrate is an{' '}
-          <Text style={styles.disclaimerBold}>independent, unofficial informational app</Text>.
-          {' '}Not affiliated with, endorsed by, or representing the Government of Canada, IRCC, or any Canadian government agency.
-        </Text>
-      </View>
-
+      {/* Legal */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Legal</Text>
+        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Legal & Privacy</Text>
         <SettingsRow
           colors={colors}
           icon={<Info size={20} color="#E8830A" />}
-          title="About & Disclaimer"
+          title="About & Full Disclaimer"
           subtitle="Independent app — not a government service"
           onPress={() => router.push('/disclaimer' as any)}
         />
@@ -211,21 +237,56 @@ export default function SettingsScreen() {
           colors={colors}
           icon={<Shield size={20} color={colors.textSecondary} />}
           title="Privacy Policy"
+          subtitle="All data stored locally — no servers"
           onPress={() => Alert.alert(
             'Privacy Policy',
-            'CanImmigrate respects your privacy. All profile data is stored locally on your device. We do not collect, transmit, or store any personal information on external servers. Your CRS calculations and saved scenarios remain private and accessible only to you.'
+            'CanImmigrate respects your privacy. All profile data is stored locally on your device only. We do not collect, transmit, or store any personal information on external servers. Your CRS calculations and saved data remain private and accessible only to you on this device.',
+            [{ text: 'OK' }]
           )}
         />
       </View>
 
-      <View style={styles.footer}>
-        <Text style={[styles.footerText, { color: colors.textMuted }]}>CanImmigrate v1.0.0</Text>
-        <Text style={[styles.footerSubtext, { color: colors.textMuted }]}>
-          Independent app — Not affiliated with the Government of Canada, IRCC, or any government agency
+      {/* Full disclaimer block */}
+      <View style={[styles.fullDisclaimerBlock, { backgroundColor: isDark ? '#1A0900' : '#FFF8F0', borderColor: '#E8830A' }]}>
+        <View style={styles.fullDisclaimerHeader}>
+          <AlertTriangle size={16} color="#E8830A" />
+          <Text style={[styles.fullDisclaimerHeading, { color: '#E8830A' }]}>IMPORTANT DISCLAIMER</Text>
+        </View>
+        <Text style={[styles.fullDisclaimerText, { color: isDark ? '#F5A642' : '#7A3500' }]}>
+          CanImmigrate is an <Text style={styles.boldText}>independent, unofficial informational app</Text>. It is{' '}
+          <Text style={styles.boldText}>NOT affiliated with, endorsed by, or representing</Text> the Government of Canada,
+          Immigration Refugees and Citizenship Canada (IRCC), Statistics Canada, or any Canadian federal or provincial
+          government agency.{'\n\n'}
+          This app does <Text style={styles.boldText}>NOT</Text> provide legal or immigration advice, facilitate
+          government applications, or guarantee any immigration outcome. CRS scores shown are{' '}
+          <Text style={styles.boldText}>unofficial estimates only</Text>.{'\n\n'}
+          Always verify all information directly on{' '}
+          <Text
+            style={[styles.linkText]}
+            onPress={() => Linking.openURL('https://www.canada.ca')}
+          >
+            canada.ca
+          </Text>{' '}
+          or{' '}
+          <Text
+            style={styles.linkText}
+            onPress={() => Linking.openURL('https://ircc.canada.ca')}
+          >
+            ircc.canada.ca
+          </Text>
+          . Consult a licensed RCIC for personalized advice.
         </Text>
       </View>
 
-      <View style={{ height: 24 }} />
+      <View style={styles.footer}>
+        <Text style={[styles.footerText, { color: colors.textMuted }]}>CanImmigrate — Unofficial CRS Estimator</Text>
+        <Text style={[styles.footerSubtext, { color: colors.textMuted }]}>
+          Not affiliated with the Government of Canada, IRCC, or any government agency
+        </Text>
+        <Text style={[styles.footerContact, { color: colors.textMuted }]}>
+          {DEVELOPER_EMAIL}
+        </Text>
+      </View>
     </ScrollView>
   );
 }
@@ -237,6 +298,22 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 8,
+  },
+  topDisclaimerBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    marginBottom: 16,
+    marginTop: 8,
+  },
+  topDisclaimerText: {
+    fontSize: 12,
+    fontWeight: '700' as const,
+    letterSpacing: 0.2,
   },
   profileCard: {
     flexDirection: 'row',
@@ -303,6 +380,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600' as const,
   },
+  notifNote: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    marginBottom: 8,
+  },
+  notifNoteText: {
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 17,
+  },
   settingsRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -326,6 +418,77 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
+  contactCard: {
+    flexDirection: 'row',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 8,
+    gap: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  contactIconCircle: {
+    width: 46,
+    height: 46,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  contactInfo: {
+    flex: 1,
+  },
+  contactTitle: {
+    fontSize: 15,
+    fontWeight: '700' as const,
+  },
+  contactSubtitle: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  emailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginTop: 6,
+  },
+  emailText: {
+    fontSize: 13,
+    fontWeight: '600' as const,
+    textDecorationLine: 'underline' as const,
+  },
+  fullDisclaimerBlock: {
+    borderRadius: 16,
+    borderWidth: 2,
+    padding: 18,
+    marginBottom: 20,
+  },
+  fullDisclaimerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 12,
+  },
+  fullDisclaimerHeading: {
+    fontSize: 12,
+    fontWeight: '800' as const,
+    letterSpacing: 0.8,
+  },
+  fullDisclaimerText: {
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  boldText: {
+    fontWeight: '800' as const,
+  },
+  linkText: {
+    fontWeight: '700' as const,
+    textDecorationLine: 'underline' as const,
+    color: '#E8830A',
+  },
   footer: {
     alignItems: 'center',
     paddingVertical: 20,
@@ -340,21 +503,8 @@ const styles = StyleSheet.create({
     textAlign: 'center' as const,
     lineHeight: 16,
   },
-  disclaimerBanner: {
-    borderRadius: 14,
-    borderWidth: 1.5,
-    padding: 14,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 10,
-    marginBottom: 4,
-  },
-  disclaimerBannerText: {
-    flex: 1,
-    fontSize: 13,
-    lineHeight: 19,
-  },
-  disclaimerBold: {
-    fontWeight: '700' as const,
+  footerContact: {
+    fontSize: 11,
+    marginTop: 4,
   },
 });

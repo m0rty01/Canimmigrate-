@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Animated,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,20 +17,24 @@ import {
   Lightbulb,
   CheckCircle2,
   Circle,
-  Newspaper,
   Calculator,
   Map,
   Sparkles,
+  ExternalLink,
+  AlertTriangle,
+  BookOpen,
   MessageCircle,
 } from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser } from '@/providers/UserProvider';
-import { newsItems, drawHistory } from '@/mocks/news';
+
+const OFFICIAL_DRAWS_URL =
+  'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/submit-profile/rounds-invitations.html';
 
 export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const {
     profile,
     crsBreakdown,
@@ -78,12 +83,19 @@ export default function DashboardScreen() {
     );
   }
 
-  const recentDraws = drawHistory.slice(0, 3);
   const topTips = tips.slice(0, 3);
   const visibleChecklist = checklist;
 
   return (
     <View style={[styles.container, { paddingTop: insets.top, backgroundColor: colors.background }]}>
+      {/* Persistent disclaimer banner */}
+      <View style={[styles.persistentBanner, { backgroundColor: isDark ? '#2A1200' : '#FFF3E0', borderBottomColor: '#E8830A' }]}>
+        <AlertTriangle size={12} color="#E8830A" />
+        <Text style={styles.persistentBannerText}>
+          Unofficial — Not IRCC / Gov of Canada — Verify on canada.ca
+        </Text>
+      </View>
+
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -92,15 +104,16 @@ export default function DashboardScreen() {
         <View style={styles.header}>
           <View>
             <Text style={[styles.greeting, { color: colors.text }]}>
-              {profile.name ? `Hello, ${profile.name}` : 'Welcome back'}
+              {profile.name ? `Hello, ${profile.name}` : 'Welcome'}
             </Text>
-            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Your immigration journey</Text>
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>CRS Estimator & General Reference</Text>
           </View>
           <View style={[styles.headerBadge, { backgroundColor: colors.errorLight }]}>
             <Text style={styles.headerBadgeText}>🍁</Text>
           </View>
         </View>
 
+        {/* CRS Score Card */}
         <TouchableOpacity activeOpacity={0.9} onPress={() => router.push('/calculator' as any)}>
           <LinearGradient
             colors={[colors.primary, colors.primaryDark]}
@@ -109,7 +122,7 @@ export default function DashboardScreen() {
             style={styles.scoreCard}
           >
             <View style={styles.scoreCardHeader}>
-              <Text style={styles.scoreLabel}>Your CRS Score</Text>
+              <Text style={styles.scoreLabel}>Estimated CRS Score</Text>
               <View style={styles.scoreBadge}>
                 <TrendingUp size={14} color={colors.textLight} />
                 <Text style={[styles.scoreBadgeText, { color: colors.textLight }]}>
@@ -142,22 +155,29 @@ export default function DashboardScreen() {
               })}
             </View>
 
+            <View style={styles.estimateWarning}>
+              <Text style={styles.estimateWarningText}>
+                ⚠ Unofficial estimate only — not an official score
+              </Text>
+            </View>
+
             {!profile.profileCompleted && (
               <View style={styles.setupPrompt}>
                 <Text style={[styles.setupPromptText, { color: colors.textLight }]}>
-                  Complete your profile for an accurate score →
+                  Complete your profile for a better estimate →
                 </Text>
               </View>
             )}
           </LinearGradient>
         </TouchableOpacity>
 
+        {/* Quick Actions */}
         <View style={styles.quickActions}>
           <TouchableOpacity style={[styles.quickAction, { backgroundColor: colors.surface }]} onPress={() => router.push('/calculator' as any)}>
             <View style={[styles.quickActionIcon, { backgroundColor: colors.infoLight }]}>
               <Calculator size={20} color={colors.info} />
             </View>
-            <Text style={[styles.quickActionText, { color: colors.text }]}>Calculate</Text>
+            <Text style={[styles.quickActionText, { color: colors.text }]}>CRS Estimator</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.quickAction, { backgroundColor: colors.surface }]} onPress={() => router.push('/pathways' as any)}>
             <View style={[styles.quickActionIcon, { backgroundColor: colors.successLight }]}>
@@ -165,37 +185,67 @@ export default function DashboardScreen() {
             </View>
             <Text style={[styles.quickActionText, { color: colors.text }]}>Pathways</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.quickAction, { backgroundColor: colors.surface }]} onPress={() => router.push('/news' as any)}>
+          <TouchableOpacity style={[styles.quickAction, { backgroundColor: colors.surface }]} onPress={() => router.push('/process' as any)}>
             <View style={[styles.quickActionIcon, { backgroundColor: colors.warningLight }]}>
-              <Newspaper size={20} color={colors.warning} />
+              <BookOpen size={20} color={colors.warning} />
             </View>
-            <Text style={[styles.quickActionText, { color: colors.text }]}>News</Text>
+            <Text style={[styles.quickActionText, { color: colors.text }]}>Process</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Official Draws Link — replaces in-app draws display */}
         <TouchableOpacity
-          style={[styles.aiChatBanner, { backgroundColor: colors.secondary }]}
+          style={[styles.officialDrawsCard, { backgroundColor: isDark ? '#0D1F0D' : '#F0FFF0', borderColor: '#2E7D32' }]}
+          onPress={() => Linking.openURL(OFFICIAL_DRAWS_URL)}
+          activeOpacity={0.8}
+          testID="official-draws-btn"
+        >
+          <View style={styles.officialDrawsLeft}>
+            <View style={[styles.officialDrawsIcon, { backgroundColor: '#2E7D32' }]}>
+              <ExternalLink size={18} color="#FFFFFF" />
+            </View>
+            <View style={styles.officialDrawsText}>
+              <Text style={[styles.officialDrawsTitle, { color: isDark ? '#81C784' : '#1B5E20' }]}>
+                View Latest Express Entry Draws
+              </Text>
+              <Text style={[styles.officialDrawsSubtitle, { color: isDark ? '#66BB6A' : '#2E7D32' }]}>
+                Opens canada.ca — official IRCC source
+              </Text>
+            </View>
+          </View>
+          <ExternalLink size={16} color={isDark ? '#81C784' : '#2E7D32'} />
+        </TouchableOpacity>
+
+        {/* General Q&A Reference banner */}
+        <TouchableOpacity
+          style={[styles.qaRefBanner, { backgroundColor: colors.secondary }]}
           onPress={() => router.push('/ai-chat' as any)}
           activeOpacity={0.85}
-          testID="ai-chat-btn"
+          testID="qa-ref-btn"
         >
-          <View style={styles.aiChatLeft}>
-            <View style={[styles.aiChatIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+          <View style={styles.qaRefLeft}>
+            <View style={[styles.qaRefIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
               <MessageCircle size={20} color={colors.textLight} />
             </View>
             <View>
-              <Text style={[styles.aiChatTitle, { color: colors.textLight }]}>AI Immigration Assistant</Text>
-              <Text style={[styles.aiChatSubtitle, { color: 'rgba(255,255,255,0.75)' }]}>Get personalized guidance</Text>
+              <Text style={[styles.qaRefTitle, { color: colors.textLight }]}>General Q&amp;A Reference</Text>
+              <Text style={[styles.qaRefSubtitle, { color: 'rgba(255,255,255,0.75)' }]}>Not official advice — general info only</Text>
             </View>
           </View>
           <Sparkles size={18} color={colors.textLight} />
         </TouchableOpacity>
 
+        {/* Tips */}
         {topTips.length > 0 && (
           <View style={[styles.section, { backgroundColor: colors.surface }]}>
             <View style={styles.sectionHeader}>
               <Sparkles size={18} color={colors.accent} />
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Tips to Improve</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Score Improvement Tips</Text>
+            </View>
+            <View style={[styles.sectionDisclaimer, { backgroundColor: isDark ? '#1A1200' : '#FFFDE7', borderColor: '#F9A825' }]}>
+              <Text style={[styles.sectionDisclaimerText, { color: isDark ? '#FFD54F' : '#795548' }]}>
+                General reference from public IRCC formula — not official advice
+              </Text>
             </View>
             {topTips.map((tip) => (
               <View key={tip.id} style={[styles.tipCard, { backgroundColor: colors.surfaceWarm }]}>
@@ -212,38 +262,18 @@ export default function DashboardScreen() {
           </View>
         )}
 
-        <View style={[styles.section, { backgroundColor: colors.surface }]}>
-          <View style={styles.sectionHeader}>
-            <TrendingUp size={18} color={colors.primary} />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Recent Draws</Text>
-          </View>
-          {recentDraws.map((draw, idx) => (
-            <View key={`${draw.date}-${draw.type}-${idx}`} style={[styles.drawCard, { borderBottomColor: colors.border }]}>
-              <View style={styles.drawInfo}>
-                <Text style={[styles.drawType, { color: colors.text }]}>{draw.type}</Text>
-                <Text style={[styles.drawDate, { color: colors.textMuted }]}>{draw.date}</Text>
-              </View>
-              <View style={styles.drawStats}>
-                <View style={styles.drawStat}>
-                  <Text style={[styles.drawStatValue, { color: colors.primary }]}>{draw.score}</Text>
-                  <Text style={[styles.drawStatLabel, { color: colors.textMuted }]}>CRS</Text>
-                </View>
-                <View style={[styles.drawStatDivider, { backgroundColor: colors.border }]} />
-                <View style={styles.drawStat}>
-                  <Text style={[styles.drawStatValue, { color: colors.primary }]}>{draw.invitations.toLocaleString()}</Text>
-                  <Text style={[styles.drawStatLabel, { color: colors.textMuted }]}>ITAs</Text>
-                </View>
-              </View>
-            </View>
-          ))}
-        </View>
-
+        {/* Checklist */}
         <View style={[styles.section, { backgroundColor: colors.surface }]}>
           <View style={styles.sectionHeader}>
             <CheckCircle2 size={18} color={colors.success} />
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Checklist</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>General Checklist</Text>
             <Text style={[styles.progressText, { color: colors.textSecondary }]}>
               {checklistProgress.completed}/{checklistProgress.total}
+            </Text>
+          </View>
+          <View style={[styles.sectionDisclaimer, { backgroundColor: isDark ? '#1A1200' : '#FFFDE7', borderColor: '#F9A825' }]}>
+            <Text style={[styles.sectionDisclaimerText, { color: isDark ? '#FFD54F' : '#795548' }]}>
+              General reference checklist only — not official requirements
             </Text>
           </View>
           <View style={[styles.progressBarBg, { backgroundColor: colors.surfaceAlt }]}>
@@ -274,7 +304,20 @@ export default function DashboardScreen() {
               </Text>
             </TouchableOpacity>
           ))}
+        </View>
 
+        {/* Bottom disclaimer */}
+        <View style={[styles.bottomDisclaimer, { backgroundColor: isDark ? '#1A0A00' : '#FFF8F0', borderColor: '#E8830A' }]}>
+          <AlertTriangle size={14} color="#E8830A" />
+          <Text style={[styles.bottomDisclaimerText, { color: isDark ? '#F5A642' : '#8B4A00' }]}>
+            CanImmigrate is an independent, unofficial app. Not affiliated with IRCC, the Government of Canada, or any government body. Always verify on{' '}
+            <Text
+              style={styles.bottomDisclaimerLink}
+              onPress={() => Linking.openURL('https://www.canada.ca')}
+            >
+              canada.ca
+            </Text>
+          </Text>
         </View>
 
         <View style={{ height: 24 }} />
@@ -291,6 +334,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  persistentBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 7,
+    borderBottomWidth: 1,
+  },
+  persistentBannerText: {
+    fontSize: 11,
+    fontWeight: '700' as const,
+    color: '#E8830A',
+    letterSpacing: 0.2,
   },
   scrollView: {
     flex: 1,
@@ -311,7 +369,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 15,
+    fontSize: 13,
     marginTop: 2,
   },
   headerBadge: {
@@ -389,8 +447,21 @@ const styles = StyleSheet.create({
     width: 56,
     textAlign: 'right' as const,
   },
-  setupPrompt: {
+  estimateWarning: {
     marginTop: 16,
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+  },
+  estimateWarningText: {
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.85)',
+    fontWeight: '600' as const,
+    textAlign: 'center' as const,
+  },
+  setupPrompt: {
+    marginTop: 10,
     backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: 10,
     padding: 12,
@@ -403,7 +474,7 @@ const styles = StyleSheet.create({
   quickActions: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 24,
+    marginBottom: 16,
   },
   quickAction: {
     flex: 1,
@@ -425,8 +496,70 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   quickActionText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600' as const,
+    textAlign: 'center' as const,
+  },
+  officialDrawsCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 16,
+    borderWidth: 1.5,
+    padding: 14,
+    marginBottom: 14,
+  },
+  officialDrawsLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  officialDrawsIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  officialDrawsText: {
+    flex: 1,
+  },
+  officialDrawsTitle: {
+    fontSize: 14,
+    fontWeight: '700' as const,
+  },
+  officialDrawsSubtitle: {
+    fontSize: 11,
+    marginTop: 2,
+  },
+  qaRefBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+  },
+  qaRefLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  qaRefIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  qaRefTitle: {
+    fontSize: 15,
+    fontWeight: '700' as const,
+  },
+  qaRefSubtitle: {
+    fontSize: 11,
+    marginTop: 1,
   },
   section: {
     borderRadius: 16,
@@ -442,7 +575,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 14,
+    marginBottom: 10,
   },
   sectionTitle: {
     fontSize: 17,
@@ -451,6 +584,17 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 13,
+    fontWeight: '600' as const,
+  },
+  sectionDisclaimer: {
+    borderRadius: 8,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginBottom: 12,
+  },
+  sectionDisclaimerText: {
+    fontSize: 11,
     fontWeight: '600' as const,
   },
   tipCard: {
@@ -483,44 +627,6 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginLeft: 24,
   },
-  drawCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  drawInfo: {
-    flex: 1,
-  },
-  drawType: {
-    fontSize: 14,
-    fontWeight: '600' as const,
-  },
-  drawDate: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-  drawStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  drawStat: {
-    alignItems: 'center',
-  },
-  drawStatValue: {
-    fontSize: 16,
-    fontWeight: '800' as const,
-  },
-  drawStatLabel: {
-    fontSize: 10,
-    fontWeight: '600' as const,
-  },
-  drawStatDivider: {
-    width: 1,
-    height: 24,
-  },
   progressBarBg: {
     height: 6,
     borderRadius: 3,
@@ -542,32 +648,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
   },
-  aiChatBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 24,
-  },
-  aiChatLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  aiChatIcon: {
-    width: 40,
-    height: 40,
+  bottomDisclaimer: {
     borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderWidth: 1.5,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    marginBottom: 4,
   },
-  aiChatTitle: {
-    fontSize: 15,
-    fontWeight: '700' as const,
-  },
-  aiChatSubtitle: {
+  bottomDisclaimerText: {
+    flex: 1,
     fontSize: 12,
-    marginTop: 1,
+    lineHeight: 18,
+  },
+  bottomDisclaimerLink: {
+    fontWeight: '700' as const,
+    textDecorationLine: 'underline' as const,
   },
 });

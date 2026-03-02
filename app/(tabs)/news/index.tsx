@@ -1,285 +1,207 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  RefreshControl,
-  ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TrendingUp, Users, FileText, ExternalLink, Wifi, WifiOff, RefreshCw } from 'lucide-react-native';
-import { Linking } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
+import {
+  ExternalLink,
+  Globe,
+  FileText,
+  Users,
+  TrendingUp,
+  BookOpen,
+  AlertTriangle,
+  MapPin,
+  Briefcase,
+} from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
-import { fetchLiveNewsData } from '@/services/newsService';
-import type { NewsItem, DrawRecord } from '@/types/immigration';
 
-type NewsCategory = 'all' | 'draw' | 'policy' | 'update';
+interface OfficialLink {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  icon: React.ComponentType<{ size: number; color: string }>;
+  accentColor: string;
+  bgColor: string;
+  tag: string;
+}
 
-const CATEGORY_FILTERS: { key: NewsCategory; label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'draw', label: 'Draws' },
-  { key: 'policy', label: 'Policy' },
-  { key: 'update', label: 'Updates' },
+const OFFICIAL_LINKS: OfficialLink[] = [
+  {
+    id: 'draws',
+    title: 'Express Entry Draw Results',
+    description: 'Latest rounds of invitations, CRS cutoffs, and ITA counts — official IRCC source.',
+    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/submit-profile/rounds-invitations.html',
+    icon: TrendingUp,
+    accentColor: '#2E7D32',
+    bgColor: '#E8F5E9',
+    tag: 'Draws',
+  },
+  {
+    id: 'express-entry',
+    title: 'Express Entry Overview',
+    description: 'How the Express Entry system works, eligibility, and how to create a profile.',
+    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry.html',
+    icon: Globe,
+    accentColor: '#1565C0',
+    bgColor: '#E3F2FD',
+    tag: 'Program',
+  },
+  {
+    id: 'crs-tool',
+    title: 'Official CRS Calculator (IRCC)',
+    description: 'The official Comprehensive Ranking System points calculator on canada.ca.',
+    url: 'https://ircc.canada.ca/english/immigrate/skilled/crs-tool.asp',
+    icon: FileText,
+    accentColor: '#6A1B9A',
+    bgColor: '#F3E5F5',
+    tag: 'CRS Tool',
+  },
+  {
+    id: 'pnp',
+    title: 'Provincial Nominee Programs',
+    description: 'Official guides to provincial and territorial nominee programs across Canada.',
+    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/provincial-nominees.html',
+    icon: MapPin,
+    accentColor: '#E65100',
+    bgColor: '#FFF3E0',
+    tag: 'PNP',
+  },
+  {
+    id: 'fsw',
+    title: 'Federal Skilled Worker Program',
+    description: 'Eligibility, points grid, and requirements for FSW applications.',
+    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/federal-skilled-workers.html',
+    icon: Briefcase,
+    accentColor: '#00695C',
+    bgColor: '#E0F2F1',
+    tag: 'FSW',
+  },
+  {
+    id: 'cec',
+    title: 'Canadian Experience Class',
+    description: 'Requirements and process for the Canadian Experience Class program.',
+    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/canadian-experience-class.html',
+    icon: Users,
+    accentColor: '#1565C0',
+    bgColor: '#E3F2FD',
+    tag: 'CEC',
+  },
+  {
+    id: 'levels-plan',
+    title: 'Immigration Levels Plan',
+    description: 'Annual immigration levels and targets published by IRCC.',
+    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/news/notices/supplementary-immigration-levels-2024.html',
+    icon: BookOpen,
+    accentColor: '#4527A0',
+    bgColor: '#EDE7F6',
+    tag: 'Policy',
+  },
+  {
+    id: 'ircc-news',
+    title: 'IRCC Official News & Announcements',
+    description: 'Policy announcements, program updates, and news directly from IRCC.',
+    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/news.html',
+    icon: Globe,
+    accentColor: '#AD1457',
+    bgColor: '#FCE4EC',
+    tag: 'News',
+  },
 ];
 
-const AUTO_REFRESH_INTERVAL = 5 * 60 * 1000;
-
-function formatLastUpdated(isoString: string): string {
-  const date = new Date(isoString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMin = Math.floor(diffMs / 60000);
-
-  if (diffMin < 1) return 'Just now';
-  if (diffMin < 60) return `${diffMin}m ago`;
-  const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}h ago`;
-  return date.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
-}
-
-function NewsCard({ item }: { item: NewsItem }) {
-  const { colors } = useTheme();
-
-  const CATEGORY_CONFIG: Record<string, { color: string; bgColor: string; icon: React.ComponentType<{ size: number; color: string }> }> = {
-    draw: { color: colors.primary, bgColor: colors.errorLight, icon: TrendingUp },
-    policy: { color: colors.info, bgColor: colors.infoLight, icon: FileText },
-    update: { color: colors.success, bgColor: colors.successLight, icon: Users },
-  };
-
-  const config = CATEGORY_CONFIG[item.category] || CATEGORY_CONFIG.update;
-  const IconComp = config.icon;
+function OfficialLinkCard({ item }: { item: OfficialLink }) {
+  const { colors, isDark } = useTheme();
+  const IconComp = item.icon;
+  const bgColor = isDark ? 'rgba(255,255,255,0.06)' : item.bgColor;
 
   return (
-    <View style={[styles.newsCard, { backgroundColor: colors.surface }]}>
-      <View style={styles.newsCardHeader}>
-        <View style={[styles.categoryBadge, { backgroundColor: config.bgColor }]}>
-          <IconComp size={12} color={config.color} />
-          <Text style={[styles.categoryText, { color: config.color }]}>
-            {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
-          </Text>
-        </View>
-        <Text style={[styles.newsDate, { color: colors.textMuted }]}>{item.date}</Text>
+    <TouchableOpacity
+      style={[styles.linkCard, { backgroundColor: colors.surface }]}
+      onPress={() => Linking.openURL(item.url)}
+      activeOpacity={0.75}
+      testID={`official-link-${item.id}`}
+    >
+      <View style={[styles.linkIconWrap, { backgroundColor: bgColor }]}>
+        <IconComp size={22} color={item.accentColor} />
       </View>
-      <Text style={[styles.newsTitle, { color: colors.text }]}>{item.title}</Text>
-      <Text style={[styles.newsSummary, { color: colors.textSecondary }]}>{item.summary}</Text>
-      {item.drawScore !== undefined && (
-        <View style={[styles.drawDetails, { backgroundColor: colors.surfaceAlt }]}>
-          <View style={styles.drawDetail}>
-            <Text style={[styles.drawDetailValue, { color: colors.primary }]}>{item.drawScore}</Text>
-            <Text style={[styles.drawDetailLabel, { color: colors.textMuted }]}>CRS Cutoff</Text>
-          </View>
-          <View style={[styles.drawDetailDivider, { backgroundColor: colors.border }]} />
-          <View style={styles.drawDetail}>
-            <Text style={[styles.drawDetailValue, { color: colors.primary }]}>
-              {item.drawInvitations?.toLocaleString()}
-            </Text>
-            <Text style={[styles.drawDetailLabel, { color: colors.textMuted }]}>Invitations</Text>
+      <View style={styles.linkBody}>
+        <View style={styles.linkTitleRow}>
+          <Text style={[styles.linkTitle, { color: colors.text }]}>{item.title}</Text>
+          <View style={[styles.tagBadge, { backgroundColor: bgColor }]}>
+            <Text style={[styles.tagText, { color: item.accentColor }]}>{item.tag}</Text>
           </View>
         </View>
-      )}
-      <TouchableOpacity
-        style={styles.sourceRow}
-        onPress={() => item.url && Linking.openURL(item.url)}
-        disabled={!item.url}
-        activeOpacity={0.7}
-      >
-        <Text style={[styles.newsSource, { color: colors.textMuted }]}>Source: {item.source}</Text>
-        {item.url && <ExternalLink size={12} color={colors.primary} />}
-      </TouchableOpacity>
-    </View>
+        <Text style={[styles.linkDescription, { color: colors.textSecondary }]}>{item.description}</Text>
+        <View style={styles.urlRow}>
+          <ExternalLink size={11} color={item.accentColor} />
+          <Text style={[styles.urlText, { color: item.accentColor }]}>canada.ca / ircc.canada.ca</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 }
 
-function DrawHistoryChart({ drawHistory }: { drawHistory: DrawRecord[] }) {
-  const { colors } = useTheme();
-  const maxScore = Math.max(...drawHistory.map((d) => d.score));
-  const minScore = Math.min(...drawHistory.map((d) => d.score));
-  const isGeneralType = (type: string) => ['CEC', 'FSW', 'General'].includes(type);
-  const range = maxScore - minScore || 1;
-
-  return (
-    <View style={[styles.chartSection, { backgroundColor: colors.surface }]}>
-      <Text style={[styles.chartTitle, { color: colors.text }]}>Historical Draw Scores</Text>
-      <Text style={[styles.chartSubtitle, { color: colors.textMuted }]}>Last 24 draws</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chartScroll}>
-        <View style={styles.chartContainer}>
-          {drawHistory.map((draw, idx) => {
-            const heightPct = ((draw.score - minScore + 20) / (range + 40)) * 100;
-            const isGeneral = isGeneralType(draw.type);
-            return (
-              <View key={`${draw.date}-${draw.type}-${idx}`} style={styles.chartBar}>
-                <Text style={[styles.chartBarScore, { color: colors.text }]}>{draw.score}</Text>
-                <View style={[styles.chartBarTrack, { backgroundColor: colors.surfaceAlt }]}>
-                  <View
-                    style={[
-                      styles.chartBarFill,
-                      {
-                        height: `${heightPct}%`,
-                        backgroundColor: isGeneral ? colors.primary : colors.info,
-                      },
-                    ]}
-                  />
-                </View>
-                <Text style={[styles.chartBarDate, { color: colors.textMuted }]}>
-                  {draw.date.split('-').slice(1).join('/')}
-                </Text>
-                <Text style={[styles.chartBarType, { color: colors.textMuted }]}>{draw.type}</Text>
-              </View>
-            );
-          })}
-        </View>
-      </ScrollView>
-      <View style={styles.chartLegend}>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: colors.primary }]} />
-          <Text style={[styles.legendText, { color: colors.textSecondary }]}>CEC / FSW / General</Text>
-        </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: colors.info }]} />
-          <Text style={[styles.legendText, { color: colors.textSecondary }]}>PNP / French / Other</Text>
-        </View>
-      </View>
-    </View>
-  );
-}
-
-export default function NewsScreen() {
+export default function OfficialResourcesScreen() {
   const insets = useSafeAreaInsets();
-  const { colors } = useTheme();
-  const [activeFilter, setActiveFilter] = useState<NewsCategory>('all');
-
-  const {
-    data,
-    isLoading,
-    isRefetching,
-    refetch,
-    dataUpdatedAt,
-  } = useQuery({
-    queryKey: ['live-news'],
-    queryFn: fetchLiveNewsData,
-    refetchInterval: AUTO_REFRESH_INTERVAL,
-    refetchOnWindowFocus: true,
-    staleTime: 2 * 60 * 1000,
-    retry: 2,
-  });
-
-  const newsItems = data?.newsItems ?? [];
-  const drawHistory = data?.drawHistory ?? [];
-  const isLive = data?.isLive ?? false;
-
-  const filteredNews = useMemo(() => {
-    if (activeFilter === 'all') return newsItems;
-    return newsItems.filter((item) => item.category === activeFilter);
-  }, [activeFilter, newsItems]);
-
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    console.log('[News] Pull-to-refresh triggered');
-    await refetch();
-    setRefreshing(false);
-  }, [refetch]);
-
-  const lastUpdatedText = dataUpdatedAt
-    ? formatLastUpdated(new Date(dataUpdatedAt).toISOString())
-    : '';
+  const { colors, isDark } = useTheme();
 
   return (
     <View style={[styles.container, { paddingTop: insets.top, backgroundColor: colors.background }]}>
+      {/* Persistent disclaimer banner */}
+      <View style={[styles.persistentBanner, { backgroundColor: isDark ? '#2A1200' : '#FFF3E0', borderBottomColor: '#E8830A' }]}>
+        <AlertTriangle size={12} color="#E8830A" />
+        <Text style={styles.persistentBannerText}>
+          Unofficial App — Links open official canada.ca sources
+        </Text>
+      </View>
+
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={colors.primary}
-            colors={[colors.primary]}
-          />
-        }
       >
         <View style={styles.headerRow}>
-          <View style={styles.headerTextCol}>
-            <Text style={[styles.screenTitle, { color: colors.text }]}>News & Updates</Text>
-            <Text style={[styles.screenSubtitle, { color: colors.textSecondary }]}>Latest immigration developments</Text>
-          </View>
-          <TouchableOpacity
-            style={[styles.refreshBtn, { backgroundColor: colors.surface }]}
-            onPress={onRefresh}
-            activeOpacity={0.7}
-          >
-            {isRefetching ? (
-              <ActivityIndicator size="small" color={colors.primary} />
-            ) : (
-              <RefreshCw size={18} color={colors.textSecondary} />
-            )}
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.statusBar, { backgroundColor: isLive ? '#E8F5E9' : colors.surfaceAlt }]}>
-          {isLive ? (
-            <Wifi size={13} color="#2E7D32" />
-          ) : (
-            <WifiOff size={13} color={colors.textMuted} />
-          )}
-          <Text style={[styles.statusText, { color: isLive ? '#2E7D32' : colors.textMuted }]}>
-            {isLive ? 'Live from IRCC' : 'Offline — showing cached data'}
-          </Text>
-          {lastUpdatedText ? (
-            <Text style={[styles.statusTime, { color: isLive ? '#558B2F' : colors.textMuted }]}>
-              · Updated {lastUpdatedText}
+          <View>
+            <Text style={[styles.screenTitle, { color: colors.text }]}>Official Sources</Text>
+            <Text style={[styles.screenSubtitle, { color: colors.textSecondary }]}>
+              Direct links to canada.ca &amp; IRCC
             </Text>
-          ) : null}
-          {isLoading && (
-            <ActivityIndicator size="small" color={colors.primary} style={{ marginLeft: 6 }} />
-          )}
+          </View>
+          <View style={[styles.govBadge, { backgroundColor: isDark ? '#0D1F0D' : '#E8F5E9', borderColor: '#2E7D32' }]}>
+            <Globe size={14} color="#2E7D32" />
+            <Text style={styles.govBadgeText}>Gov CA</Text>
+          </View>
         </View>
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.filterScroll}
-          contentContainerStyle={styles.filterContent}
-        >
-          {CATEGORY_FILTERS.map((filter) => (
-            <TouchableOpacity
-              key={filter.key}
-              style={[
-                styles.filterChip,
-                { backgroundColor: colors.surface, borderColor: colors.border },
-                activeFilter === filter.key && { backgroundColor: colors.primary, borderColor: colors.primary },
-              ]}
-              onPress={() => setActiveFilter(filter.key)}
-            >
-              <Text
-                style={[
-                  styles.filterChipText,
-                  { color: colors.textSecondary },
-                  activeFilter === filter.key && { color: colors.textLight },
-                ]}
-              >
-                {filter.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        {/* Info callout */}
+        <View style={[styles.infoCallout, { backgroundColor: isDark ? '#0D1520' : '#E3F2FD', borderColor: '#1565C0' }]}>
+          <FileText size={15} color="#1565C0" />
+          <Text style={[styles.infoCalloutText, { color: isDark ? '#90CAF9' : '#0D47A1' }]}>
+            This app does not aggregate or display news. Tap any link below to view the latest official information directly on government websites. Data shown in other sections of this app is{' '}
+            <Text style={styles.boldText}>not live</Text> — always verify on official sources.
+          </Text>
+        </View>
 
-        {drawHistory.length > 0 && <DrawHistoryChart drawHistory={drawHistory} />}
+        <Text style={[styles.groupLabel, { color: colors.textMuted }]}>GOVERNMENT LINKS</Text>
 
-        {isLoading && newsItems.length === 0 ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={colors.primary} />
-            <Text style={[styles.loadingText, { color: colors.textMuted }]}>Loading latest news...</Text>
-          </View>
-        ) : (
-          filteredNews.map((item) => (
-            <NewsCard key={item.id} item={item} />
-          ))
-        )}
+        {OFFICIAL_LINKS.map((item) => (
+          <OfficialLinkCard key={item.id} item={item} />
+        ))}
+
+        {/* Bottom disclaimer */}
+        <View style={[styles.bottomDisclaimer, { backgroundColor: isDark ? '#1A0900' : '#FFF8F0', borderColor: '#E8830A' }]}>
+          <AlertTriangle size={14} color="#E8830A" />
+          <Text style={[styles.bottomDisclaimerText, { color: isDark ? '#F5A642' : '#8B4A00' }]}>
+            CanImmigrate is an independent, unofficial app. Not affiliated with IRCC or the Government of Canada.
+            Tapping links above opens external official government websites.
+          </Text>
+        </View>
 
         <View style={{ height: 24 }} />
       </ScrollView>
@@ -290,6 +212,21 @@ export default function NewsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  persistentBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 7,
+    borderBottomWidth: 1,
+  },
+  persistentBannerText: {
+    fontSize: 11,
+    fontWeight: '700' as const,
+    color: '#E8830A',
+    letterSpacing: 0.2,
   },
   scrollView: {
     flex: 1,
@@ -302,22 +239,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-  },
-  headerTextCol: {
-    flex: 1,
-  },
-  refreshBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 3,
-    elevation: 1,
+    marginBottom: 16,
   },
   screenTitle: {
     fontSize: 28,
@@ -325,201 +247,122 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   screenSubtitle: {
-    fontSize: 15,
-    marginTop: 2,
-    marginBottom: 10,
-  },
-  statusBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 10,
-    marginBottom: 14,
-    gap: 6,
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: '600' as const,
-  },
-  statusTime: {
-    fontSize: 12,
-    fontWeight: '400' as const,
-  },
-  filterScroll: {
-    marginBottom: 20,
-    marginHorizontal: -20,
-  },
-  filterContent: {
-    paddingHorizontal: 20,
-    gap: 8,
-  },
-  filterChip: {
-    paddingHorizontal: 18,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-  },
-  filterChipText: {
     fontSize: 14,
-    fontWeight: '600' as const,
-  },
-  chartSection: {
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  chartTitle: {
-    fontSize: 17,
-    fontWeight: '700' as const,
-  },
-  chartSubtitle: {
-    fontSize: 13,
-    marginBottom: 16,
     marginTop: 2,
   },
-  chartScroll: {
-    marginHorizontal: -4,
-  },
-  chartContainer: {
+  govBadge: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 6,
-    paddingHorizontal: 4,
-    height: 160,
-  },
-  chartBar: {
     alignItems: 'center',
-    width: 50,
-  },
-  chartBarScore: {
-    fontSize: 10,
-    fontWeight: '700' as const,
-    marginBottom: 4,
-  },
-  chartBarTrack: {
-    width: 28,
-    height: 100,
-    borderRadius: 6,
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
-  },
-  chartBarFill: {
-    width: 28,
-    borderRadius: 6,
-  },
-  chartBarDate: {
-    fontSize: 9,
+    gap: 5,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
     marginTop: 4,
   },
-  chartBarType: {
-    fontSize: 8,
-    fontWeight: '500' as const,
-  },
-  chartLegend: {
-    flexDirection: 'row',
-    gap: 16,
-    marginTop: 12,
-    justifyContent: 'center',
-  },
-  legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  legendDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  legendText: {
+  govBadgeText: {
     fontSize: 12,
+    fontWeight: '700' as const,
+    color: '#2E7D32',
   },
-  newsCard: {
+  infoCallout: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    padding: 14,
+    marginBottom: 20,
+  },
+  infoCalloutText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  boldText: {
+    fontWeight: '800' as const,
+  },
+  groupLabel: {
+    fontSize: 12,
+    fontWeight: '700' as const,
+    letterSpacing: 0.8,
+    textTransform: 'uppercase' as const,
+    marginBottom: 10,
+    marginLeft: 2,
+  },
+  linkCard: {
+    flexDirection: 'row',
     borderRadius: 16,
     padding: 16,
-    marginBottom: 12,
+    marginBottom: 10,
+    gap: 14,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
+    shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 1,
   },
-  newsCardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  linkIconWrap: {
+    width: 46,
+    height: 46,
+    borderRadius: 14,
     alignItems: 'center',
-    marginBottom: 10,
+    justifyContent: 'center',
+    flexShrink: 0,
+    marginTop: 2,
   },
-  categoryBadge: {
+  linkBody: {
+    flex: 1,
+  },
+  linkTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 8,
+    marginBottom: 5,
+  },
+  linkTitle: {
+    fontSize: 14,
+    fontWeight: '700' as const,
+    flex: 1,
+    lineHeight: 19,
+  },
+  tagBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    flexShrink: 0,
+  },
+  tagText: {
+    fontSize: 10,
+    fontWeight: '700' as const,
+  },
+  linkDescription: {
+    fontSize: 12,
+    lineHeight: 18,
+    marginBottom: 7,
+  },
+  urlRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
   },
-  categoryText: {
+  urlText: {
     fontSize: 11,
-    fontWeight: '700' as const,
+    fontWeight: '600' as const,
   },
-  newsDate: {
-    fontSize: 12,
-  },
-  newsTitle: {
-    fontSize: 16,
-    fontWeight: '700' as const,
-    marginBottom: 6,
-    lineHeight: 22,
-  },
-  newsSummary: {
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  drawDetails: {
+  bottomDisclaimer: {
+    borderRadius: 12,
+    borderWidth: 1.5,
+    padding: 14,
     flexDirection: 'row',
-    marginTop: 12,
-    borderRadius: 10,
-    padding: 12,
+    alignItems: 'flex-start',
+    gap: 10,
+    marginTop: 8,
   },
-  drawDetail: {
+  bottomDisclaimerText: {
     flex: 1,
-    alignItems: 'center',
-  },
-  drawDetailValue: {
-    fontSize: 20,
-    fontWeight: '800' as const,
-  },
-  drawDetailLabel: {
-    fontSize: 11,
-    fontWeight: '500' as const,
-    marginTop: 2,
-  },
-  drawDetailDivider: {
-    width: 1,
-  },
-  sourceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginTop: 10,
-  },
-  newsSource: {
-    fontSize: 11,
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 60,
-    gap: 12,
-  },
-  loadingText: {
-    fontSize: 14,
-    fontWeight: '500' as const,
+    fontSize: 12,
+    lineHeight: 18,
   },
 });
