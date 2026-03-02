@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { LayoutDashboard, Calculator, Map, ExternalLink, Settings, Route, BarChart3 } from 'lucide-react-native';
+import { LayoutDashboard, Calculator, Map, Settings, Route, BarChart3 } from 'lucide-react-native';
 import React from 'react';
 import { useTheme } from '@/providers/ThemeProvider';
 
@@ -60,10 +60,11 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="news"
-        options={{
-          title: 'Official',
-          tabBarIcon: ({ color, size }) => <ExternalLink size={size} color={color} />,
-        }}
+        options={{ href: null }}
+      />
+      <Tabs.Screen
+        name="resources"
+        options={{ href: null }}
       />
       <Tabs.Screen
         name="settings"

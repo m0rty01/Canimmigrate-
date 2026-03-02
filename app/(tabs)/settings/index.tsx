@@ -24,6 +24,12 @@ import {
   AlertTriangle,
   MessageSquare,
   Globe,
+  TrendingUp,
+  FileText,
+  MapPin,
+  Briefcase,
+  Users,
+  BookOpen,
 } from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser } from '@/providers/UserProvider';
@@ -201,27 +207,75 @@ export default function SettingsScreen() {
 
       {/* Official Resources */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Official Resources</Text>
+        <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>Official Government Resources</Text>
+        <View style={[styles.officialNote, { backgroundColor: isDark ? '#0D1520' : '#E3F2FD', borderColor: '#1565C0' }]}>
+          <FileText size={13} color="#1565C0" />
+          <Text style={[styles.officialNoteText, { color: isDark ? '#90CAF9' : '#0D47A1' }]}>
+            This app does not aggregate news. Tap any link to view official information directly on government websites.
+          </Text>
+        </View>
         <SettingsRow
           colors={colors}
-          icon={<Globe size={20} color={colors.info} />}
-          title="IRCC Official Website"
-          subtitle="canada.ca/en/immigration-refugees-citizenship"
-          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship.html')}
+          icon={<TrendingUp size={20} color="#2E7D32" />}
+          title="Express Entry Draw Results"
+          subtitle="Latest rounds of invitations & CRS cutoffs — canada.ca"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/submit-profile/rounds-invitations.html')}
         />
         <SettingsRow
           colors={colors}
-          icon={<ExternalLink size={20} color={colors.success} />}
-          title="Express Entry Draws (Official)"
-          subtitle="Latest draw results on canada.ca"
-          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/submit-profile/rounds-invitations.html')}
+          icon={<Globe size={20} color={colors.info} />}
+          title="Express Entry Overview"
+          subtitle="How Express Entry works — canada.ca"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry.html')}
+        />
+        <SettingsRow
+          colors={colors}
+          icon={<FileText size={20} color="#6A1B9A" />}
+          title="Official CRS Calculator (IRCC)"
+          subtitle="Official points calculator on ircc.canada.ca"
+          onPress={() => Linking.openURL('https://ircc.canada.ca/english/immigrate/skilled/crs-tool.asp')}
+        />
+        <SettingsRow
+          colors={colors}
+          icon={<MapPin size={20} color="#E65100" />}
+          title="Provincial Nominee Programs"
+          subtitle="Official PNP guides — canada.ca"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/provincial-nominees.html')}
+        />
+        <SettingsRow
+          colors={colors}
+          icon={<Briefcase size={20} color="#00695C" />}
+          title="Federal Skilled Worker Program"
+          subtitle="FSW eligibility & requirements — canada.ca"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/federal-skilled-workers.html')}
+        />
+        <SettingsRow
+          colors={colors}
+          icon={<Users size={20} color={colors.info} />}
+          title="Canadian Experience Class"
+          subtitle="CEC requirements & process — canada.ca"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/canadian-experience-class.html')}
+        />
+        <SettingsRow
+          colors={colors}
+          icon={<BookOpen size={20} color="#4527A0" />}
+          title="Immigration Levels Plan"
+          subtitle="Annual immigration targets — canada.ca"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/news/notices/supplementary-immigration-levels-2024.html')}
         />
         <SettingsRow
           colors={colors}
           icon={<ExternalLink size={20} color={colors.textSecondary} />}
           title="Statistics Canada"
-          subtitle="statcan.gc.ca"
+          subtitle="statcan.gc.ca — public datasets"
           onPress={() => Linking.openURL('https://www.statcan.gc.ca')}
+        />
+        <SettingsRow
+          colors={colors}
+          icon={<Globe size={20} color="#AD1457" />}
+          title="IRCC Website"
+          subtitle="canada.ca/en/immigration-refugees-citizenship"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship.html')}
         />
       </View>
 
@@ -504,6 +558,21 @@ const styles = StyleSheet.create({
     fontWeight: '700' as const,
     textDecorationLine: 'underline' as const,
     color: '#E8830A',
+  },
+  officialNote: {
+    flexDirection: 'row' as const,
+    alignItems: 'flex-start',
+    gap: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 8,
+  },
+  officialNoteText: {
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 17,
   },
   footer: {
     alignItems: 'center',
