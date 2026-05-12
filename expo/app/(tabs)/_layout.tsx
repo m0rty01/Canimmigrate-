@@ -59,14 +59,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="news"
-        options={{ href: null }}
-      />
-      <Tabs.Screen
-        name="resources"
-        options={{ href: null }}
-      />
-      <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',

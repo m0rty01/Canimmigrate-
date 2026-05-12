@@ -157,7 +157,7 @@ export default function SettingsScreen() {
         <View style={[styles.notifNote, { backgroundColor: isDark ? '#0D1A0D' : '#F1F8F1', borderColor: colors.border }]}>
           <Info size={13} color={colors.textMuted} />
           <Text style={[styles.notifNoteText, { color: colors.textMuted }]}>
-            Reminders only — this app does not push draw results or policy updates
+Reminders only — this app does not send live immigration updates
           </Text>
         </View>
         <SettingsRow
@@ -218,7 +218,7 @@ export default function SettingsScreen() {
           colors={colors}
           icon={<TrendingUp size={20} color="#2E7D32" />}
           title="Express Entry Draw Results"
-          subtitle="Latest rounds of invitations & CRS cutoffs — canada.ca"
+          subtitle="Opens canada.ca in your browser"
           onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/submit-profile/rounds-invitations.html')}
         />
         <SettingsRow
@@ -260,8 +260,8 @@ export default function SettingsScreen() {
           colors={colors}
           icon={<BookOpen size={20} color="#4527A0" />}
           title="Immigration Levels Plan"
-          subtitle="Annual immigration targets — canada.ca"
-          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/news/notices/supplementary-immigration-levels-2024.html')}
+          subtitle="Public levels plan page — canada.ca"
+          onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/annual-report-parliament-immigration.html')}
         />
         <SettingsRow
           colors={colors}

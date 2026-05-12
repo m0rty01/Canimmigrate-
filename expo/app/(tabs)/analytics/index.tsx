@@ -9,11 +9,9 @@ import {
   Animated,
   Platform,
   Dimensions,
-  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useQuery } from '@tanstack/react-query';
 import {
   Search,
   Briefcase,
@@ -21,7 +19,6 @@ import {
   TrendingUp,
   Users,
   Target,
-  Bell,
   ChevronRight,
   ChevronDown,
   ChevronUp,
@@ -30,23 +27,18 @@ import {
   ArrowDownRight,
   Minus,
   Star,
-  AlertTriangle,
   Info,
   Zap,
   Globe,
   BarChart3,
   ArrowRight,
   X,
-  RefreshCw,
-  Wifi,
-  WifiOff,
 } from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser } from '@/providers/UserProvider';
 import { occupations, cityLivingCosts, settlementOutcomes, demographicInsights } from '@/mocks/statcan-data';
-import { immigrationTargets, categoryBreakdowns, trendAlerts } from '@/mocks/ircc-plans';
-import { fetchLiveAlerts } from '@/services/alertsService';
-import type { OccupationData, CityLivingCost, SettlementOutcome, DemographicInsight, AnalyticsSection, TrendAlert as TrendAlertType } from '@/types/analytics';
+import { immigrationTargets, categoryBreakdowns } from '@/mocks/ircc-plans';
+import type { OccupationData, CityLivingCost, SettlementOutcome, DemographicInsight, AnalyticsSection } from '@/types/analytics';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -55,8 +47,7 @@ const SECTIONS: { key: AnalyticsSection; label: string; icon: typeof Briefcase }
   { key: 'cost', label: 'Cost of Living', icon: DollarSign },
   { key: 'settlement', label: 'Settlement', icon: TrendingUp },
   { key: 'demographics', label: 'Community', icon: Users },
-  { key: 'projections', label: 'IRCC Targets', icon: Target },
-  { key: 'trends', label: 'Alerts', icon: Bell },
+  { key: 'projections', label: 'Public Targets', icon: Target },
 ];
 
 export default function AnalyticsScreen() {
@@ -72,21 +63,7 @@ export default function AnalyticsScreen() {
   const [selectedDemoCity, setSelectedDemoCity] = useState<string>('Toronto');
   const [citySearch, setCitySearch] = useState<string>('');
   const [demoSearch, setDemoSearch] = useState<string>('');
-  const [alertFilter, setAlertFilter] = useState<string>('all');
   const headerAnim = useRef(new Animated.Value(0)).current;
-
-  const liveAlertsQuery = useQuery({
-    queryKey: ['live-alerts'],
-    queryFn: fetchLiveAlerts,
-    refetchInterval: 5 * 60 * 1000,
-    staleTime: 3 * 60 * 1000,
-  });
-
-  const liveAlerts = useMemo(() => {
-    return liveAlertsQuery.data?.alerts ?? trendAlerts;
-  }, [liveAlertsQuery.data]);
-
-  const isAlertsLive = liveAlertsQuery.data?.isLive ?? false;
 
   useEffect(() => {
     Animated.timing(headerAnim, {
@@ -123,11 +100,6 @@ export default function AnalyticsScreen() {
       (d) => d.city.toLowerCase().includes(q) || d.province.toLowerCase().includes(q)
     );
   }, [demoSearch]);
-
-  const filteredAlerts = useMemo(() => {
-    if (alertFilter === 'all') return liveAlerts;
-    return liveAlerts.filter((a) => a.category === alertFilter);
-  }, [liveAlerts, alertFilter]);
 
   const selectedTarget = useMemo(() => {
     return immigrationTargets.find((t) => t.year === selectedYear) ?? immigrationTargets[1];
@@ -637,7 +609,7 @@ export default function AnalyticsScreen() {
   const renderProjections = () => (
     <View>
       <Text style={[styles.sectionDescription, { color: colors.textSecondary }]}>
-        IRCC Immigration Levels Plan targets and category breakdowns. Use this to estimate your chances and plan your timeline.
+General summaries based on publicly available immigration levels information. Not official advice; verify details directly on canada.ca.
       </Text>
 
       <View style={styles.yearSelector}>
@@ -747,98 +719,15 @@ export default function AnalyticsScreen() {
           <Text style={[styles.profileFitTitle, { color: colors.text }]}>Your Profile Fit</Text>
           <Text style={[styles.profileFitText, { color: colors.textSecondary }]}>
             {profile.profileCompleted
-              ? `Based on your CRS score and background, Federal High Skilled (${formatNumber(selectedTarget.breakdown.federalHighSkilled)} spots) and PNP (${formatNumber(selectedTarget.breakdown.pnp)} spots) are your strongest routes in ${selectedYear}.`
-              : 'Complete your profile to get personalized pathway projections based on immigration targets.'}
+              ? `General reference only: your local CRS estimate may be relevant when comparing public target categories such as Federal High Skilled (${formatNumber(selectedTarget.breakdown.federalHighSkilled)}) and PNP (${formatNumber(selectedTarget.breakdown.pnp)}) for ${selectedYear}.`
+              : 'Complete your profile to view general reference comparisons based on public target categories.'}
           </Text>
         </View>
       </View>
     </View>
   );
 
-  const ALERT_FILTERS = [
-    { key: 'all', label: 'All' },
-    { key: 'immigration', label: 'Immigration' },
-    { key: 'job_market', label: 'Jobs' },
-    { key: 'policy', label: 'Policy' },
-    { key: 'economic', label: 'Economic' },
-  ];
-
-  const renderTrendAlerts = () => (
-    <View>
-      <View style={[styles.liveStatusBar, { backgroundColor: isAlertsLive ? colors.success + '15' : colors.warning + '15', borderColor: isAlertsLive ? colors.success + '30' : colors.warning + '30' }]}>
-        {isAlertsLive ? <Wifi size={14} color={colors.success} /> : <WifiOff size={14} color={colors.warning} />}
-        <Text style={[styles.liveStatusText, { color: isAlertsLive ? colors.success : colors.warning }]}>
-          {isAlertsLive ? 'Live — Auto-refreshing every 5 min' : 'Offline — Showing cached alerts'}
-        </Text>
-        {liveAlertsQuery.isRefetching && <ActivityIndicator size="small" color={colors.primary} />}
-        <TouchableOpacity onPress={() => liveAlertsQuery.refetch()} style={styles.refreshButton}>
-          <RefreshCw size={14} color={colors.primary} />
-        </TouchableOpacity>
-      </View>
-
-      <Text style={[styles.sectionDescription, { color: colors.textSecondary }]}>
-        Key intelligence from IRCC draws, StatCan data, policy updates, and labour market shifts. Monitoring {filteredAlerts.length} alerts.
-      </Text>
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={[styles.citySelectorList, { marginBottom: 12 }]}>
-        {ALERT_FILTERS.map((f) => (
-          <TouchableOpacity
-            key={f.key}
-            onPress={() => setAlertFilter(f.key)}
-            style={[
-              styles.cityChip,
-              {
-                backgroundColor: alertFilter === f.key ? colors.primary : colors.surface,
-                borderColor: alertFilter === f.key ? colors.primary : colors.border,
-              },
-            ]}
-          >
-            <Text style={[styles.cityChipText, { color: alertFilter === f.key ? '#FFF' : colors.textSecondary }]}>
-              {f.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      {filteredAlerts.map((alert) => (
-        <View key={alert.id} style={[styles.alertCard, { backgroundColor: colors.surface, borderColor: colors.border, borderLeftColor: getSeverityColor(alert.severity), borderLeftWidth: 4 }]}>
-          <View style={styles.alertHeader}>
-            <View style={[styles.severityBadge, { backgroundColor: getSeverityColor(alert.severity) + '15' }]}>
-              {alert.severity === 'critical' ? (
-                <AlertTriangle size={12} color={getSeverityColor(alert.severity)} />
-              ) : alert.severity === 'important' ? (
-                <Zap size={12} color={getSeverityColor(alert.severity)} />
-              ) : (
-                <Info size={12} color={getSeverityColor(alert.severity)} />
-              )}
-              <Text style={[styles.severityText, { color: getSeverityColor(alert.severity) }]}>
-                {alert.severity.toUpperCase()}
-              </Text>
-            </View>
-            <View style={[styles.alertCategoryBadge, { backgroundColor: colors.surfaceAlt }]}>
-              <Text style={[styles.alertCategoryText, { color: colors.textSecondary }]}>
-                {alert.category.replace('_', ' ').toUpperCase()}
-              </Text>
-            </View>
-          </View>
-          <Text style={[styles.alertTitle, { color: colors.text }]}>{alert.title}</Text>
-          <Text style={[styles.alertDescription, { color: colors.textSecondary }]}>{alert.description}</Text>
-          <View style={styles.alertFooter}>
-            <Text style={[styles.alertSource, { color: colors.textMuted }]}>{alert.source}</Text>
-            <Text style={[styles.alertDate, { color: colors.textMuted }]}>{alert.date}</Text>
-          </View>
-        </View>
-      ))}
-
-      {filteredAlerts.length === 0 && (
-        <View style={[styles.emptyState, { backgroundColor: colors.surface }]}>
-          <Bell size={40} color={colors.textMuted} />
-          <Text style={[styles.emptyTitle, { color: colors.text }]}>No alerts in this category</Text>
-          <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>Try a different filter</Text>
-        </View>
-      )}
-    </View>
-  );
+  
 
   const renderActiveSection = () => {
     switch (activeSection) {
@@ -847,7 +736,6 @@ export default function AnalyticsScreen() {
       case 'settlement': return renderSettlementSimulator();
       case 'demographics': return renderDemographics();
       case 'projections': return renderProjections();
-      case 'trends': return renderTrendAlerts();
       default: return null;
     }
   };
@@ -866,7 +754,7 @@ export default function AnalyticsScreen() {
             <Text style={styles.headerTitle}>Data Intelligence</Text>
           </View>
           <Text style={styles.headerSubtitle}>
-            StatCan & IRCC insights for smarter decisions
+            Public datasets for general reference only
           </Text>
         </Animated.View>
       </LinearGradient>

@@ -95,4 +95,4 @@ export interface TrendAlert {
   source: string;
 }
 
-export type AnalyticsSection = 'jobs' | 'cost' | 'settlement' | 'demographics' | 'projections' | 'trends';
+export type AnalyticsSection = 'jobs' | 'cost' | 'settlement' | 'demographics' | 'projections';

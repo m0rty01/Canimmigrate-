@@ -44,8 +44,8 @@ const OFFICIAL_SOURCES = [
     url: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/provincial-nominees.html',
   },
   {
-    label: 'Immigration Levels Plan — IRCC',
-    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/news/notices/supplementary-immigration-levels-2024.html',
+    label: 'Immigration Levels Plan — canada.ca',
+    url: 'https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/annual-report-parliament-immigration.html',
   },
   {
     label: 'National Occupational Classification — Statistics Canada',
@@ -206,7 +206,7 @@ export default function DisclaimerScreen({ readOnly = false }: DisclaimerScreenP
         <View style={[styles.section, { backgroundColor: sectionBg }]}>
           <Text style={[styles.sectionHeading, { color: colors.text }]}>Always Verify Official Sources</Text>
           <Text style={[styles.bodyText, { color: colors.textSecondary }]}>
-            Immigration rules, CRS cutoffs, and processing times change frequently. Always verify
+            Immigration rules, invitation thresholds, and processing times change frequently. Always verify
             all information directly on official government websites before making any immigration decisions.
           </Text>
           <TouchableOpacity

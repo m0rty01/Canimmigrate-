@@ -83,25 +83,6 @@ export interface UserProfile {
   profileCompleted: boolean;
 }
 
-export interface NewsItem {
-  id: string;
-  title: string;
-  summary: string;
-  date: string;
-  category: 'draw' | 'policy' | 'update' | 'guide';
-  source: string;
-  url?: string;
-  drawScore?: number;
-  drawInvitations?: number;
-}
-
-export interface DrawRecord {
-  date: string;
-  score: number;
-  invitations: number;
-  type: string;
-}
-
 export interface PathwayInfo {
   id: string;
   title: string;

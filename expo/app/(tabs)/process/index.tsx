@@ -195,13 +195,13 @@ export default function ProcessScreen() {
     mutationFn: async (message: string) => {
       const context = result ? `The user was recommended the "${result.recommendedPathway}" pathway. ` : '';
       const history = chatMessages.map(m => `${m.role}: ${m.text}`).join('\n');
-      const prompt = `You are CanImmigrate+ immigration advisor. ${context}
+      const prompt = `You are CanImmigrate, an independent and unofficial general reference tool. You are NOT affiliated with IRCC, the Government of Canada, or any government body. Do not provide legal or immigration advice, do not guarantee outcomes, and tell the user to verify all information on canada.ca or consult a licensed RCIC/lawyer for personalized help. ${context}
 User profile: Field: ${answers.fieldOfStudy}, Education: ${answers.highestEducation}, Occupation: ${answers.currentOccupation}, Experience: ${answers.yearsOfExperience} years.
 Previous conversation:
 ${history}
 User: ${message}
 
-Provide helpful, specific immigration advice. Be concise but thorough. Include specific details like employer names, contact info, or resources when relevant. Format your response clearly.`;
+Provide general, non-advisory reference information only. Be concise, neutral, and include official canada.ca verification reminders when relevant.`;
       const response = await generateText({ messages: [{ role: 'user', content: prompt }] });
       return response;
     },
@@ -219,7 +219,7 @@ Provide helpful, specific immigration advice. Be concise but thorough. Include s
       ? `CRS Score: ${crsBreakdown.total}, Age: ${profile.age}, Canadian Work Exp: ${profile.canadianWorkExperience} years, Foreign Work Exp: ${profile.foreignWorkExperience} years, Has Job Offer: ${profile.hasJobOffer}, Has PNP: ${profile.hasPNP}.`
       : 'No CRS profile completed yet.';
 
-    return `You are an expert Canadian immigration consultant. Analyze this applicant's profile and recommend the BEST matching PR pathway.
+    return `You are CanImmigrate, an independent and unofficial general reference tool. You are NOT affiliated with IRCC, the Government of Canada, or any government body. Do not provide legal or immigration advice, do not guarantee outcomes, and tell users to verify all information on canada.ca or consult a licensed RCIC/lawyer for personalized help. Analyze this applicant's profile for general reference only and identify potentially relevant public pathway categories.
 
 APPLICANT PROFILE:
 - Field of Study: ${answers.fieldOfStudy}
@@ -239,9 +239,9 @@ APPLICANT PROFILE:
 
 INSTRUCTIONS: Respond in this EXACT JSON format (no markdown, no code blocks, just raw JSON):
 {
-  "recommendedPathway": "Name of the best matching PR program",
+  "recommendedPathway": "Name of a potentially relevant public pathway category",
   "matchScore": "percentage like 85%",
-  "whyThisPathway": "2-3 sentences explaining why this is the best match for BOTH the applicant AND the program's goals of attracting suitable candidates who will benefit the community",
+  "whyThisPathway": "2-3 sentences explaining, as general reference only, why this pathway may be relevant. Include a reminder to verify on canada.ca.",
   "eligibility": ["detailed eligibility requirement 1", "requirement 2", "requirement 3", "requirement 4", "requirement 5"],
   "detailedProcess": ["Step 1: detailed description", "Step 2: detailed description", "Step 3", "Step 4", "Step 5", "Step 6", "Step 7", "Step 8"],
   "timeline": ["Phase 1 (Month 1-2): what to do", "Phase 2 (Month 3-4): what to do", "Phase 3 (Month 5-8): what to do", "Phase 4 (Month 9-12): what to do"],
@@ -259,10 +259,10 @@ INSTRUCTIONS: Respond in this EXACT JSON format (no markdown, no code blocks, ju
 }
 
 IMPORTANT: 
-- Suggest REAL Canadian employers in the applicant's field who are known to hire immigrants, with their actual career/HR email addresses.
-- Match the pathway to what the PR program is specifically designed to attract — choose the program where this applicant would be the most valuable contribution to the community.
-- Be specific about the applicant's field, not generic.
-- Include actual processing times and costs from IRCC.`;
+- Do not present the result as official advice, legal advice, or an eligibility decision.
+- Do not guarantee outcomes or imply government authorization.
+- Use neutral language such as "may be relevant" and "general reference only".
+- If mentioning costs, timelines, or requirements, tell the user to verify current details directly on canada.ca.`;
   }, [answers, profile, crsBreakdown]);
 
   const parseAIResponse = useCallback((text: string): PathwayResult => {
@@ -872,7 +872,7 @@ IMPORTANT:
           testID="process-chat-btn"
         >
           <Bot size={20} color={colors.textLight} />
-          <Text style={[styles.chatBtnText, { color: colors.textLight }]}>Ask Follow-up Questions</Text>
+          <Text style={[styles.chatBtnText, { color: colors.textLight }]}>General Follow-up Reference</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -906,7 +906,7 @@ IMPORTANT:
           <View style={styles.chatEmpty}>
             <Bot size={32} color={colors.textMuted} />
             <Text style={[styles.chatEmptyText, { color: colors.textSecondary }]}>
-              Ask anything about your recommended pathway, employer contacts, or next steps.
+Ask general reference questions only. Verify details on canada.ca or consult a licensed RCIC/lawyer.
             </Text>
           </View>
         )}
