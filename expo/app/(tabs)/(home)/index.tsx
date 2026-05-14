@@ -22,8 +22,6 @@ import {
   Sparkles,
   ExternalLink,
   AlertTriangle,
-  BookOpen,
-  MessageCircle,
 } from 'lucide-react-native';
 import { useTheme } from '@/providers/ThemeProvider';
 import { useUser } from '@/providers/UserProvider';
@@ -185,11 +183,11 @@ export default function DashboardScreen() {
             </View>
             <Text style={[styles.quickActionText, { color: colors.text }]}>Pathways</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.quickAction, { backgroundColor: colors.surface }]} onPress={() => router.push('/process' as any)}>
+          <TouchableOpacity style={[styles.quickAction, { backgroundColor: colors.surface }]} onPress={() => router.push('/settings/contact' as any)}>
             <View style={[styles.quickActionIcon, { backgroundColor: colors.warningLight }]}>
-              <BookOpen size={20} color={colors.warning} />
+              <AlertTriangle size={20} color={colors.warning} />
             </View>
-            <Text style={[styles.quickActionText, { color: colors.text }]}>Process</Text>
+            <Text style={[styles.quickActionText, { color: colors.text }]}>Contact & Legal</Text>
           </TouchableOpacity>
         </View>
 
@@ -216,20 +214,20 @@ export default function DashboardScreen() {
           <ExternalLink size={16} color={isDark ? '#81C784' : '#2E7D32'} />
         </TouchableOpacity>
 
-        {/* General Q&A Reference banner */}
+        {/* Legal and contact reference banner */}
         <TouchableOpacity
           style={[styles.qaRefBanner, { backgroundColor: colors.secondary }]}
-          onPress={() => router.push('/ai-chat' as any)}
+          onPress={() => router.push('/settings/contact' as any)}
           activeOpacity={0.85}
-          testID="qa-ref-btn"
+          testID="contact-legal-btn"
         >
           <View style={styles.qaRefLeft}>
             <View style={[styles.qaRefIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-              <MessageCircle size={20} color={colors.textLight} />
+              <AlertTriangle size={20} color={colors.textLight} />
             </View>
             <View>
-              <Text style={[styles.qaRefTitle, { color: colors.textLight }]}>General Q&amp;A Reference</Text>
-              <Text style={[styles.qaRefSubtitle, { color: 'rgba(255,255,255,0.75)' }]}>Not official advice — general info only</Text>
+              <Text style={[styles.qaRefTitle, { color: colors.textLight }]}>Contact & Legal Notice</Text>
+              <Text style={[styles.qaRefSubtitle, { color: 'rgba(255,255,255,0.75)' }]}>Developer contact and unofficial status</Text>
             </View>
           </View>
           <Sparkles size={18} color={colors.textLight} />
@@ -240,7 +238,7 @@ export default function DashboardScreen() {
           <View style={[styles.section, { backgroundColor: colors.surface }]}>
             <View style={styles.sectionHeader}>
               <Sparkles size={18} color={colors.accent} />
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Score Improvement Tips</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>General CRS Reference Tips</Text>
             </View>
             <View style={[styles.sectionDisclaimer, { backgroundColor: isDark ? '#1A1200' : '#FFFDE7', borderColor: '#F9A825' }]}>
               <Text style={[styles.sectionDisclaimerText, { color: isDark ? '#FFD54F' : '#795548' }]}>

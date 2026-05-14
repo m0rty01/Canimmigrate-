@@ -217,8 +217,8 @@ Reminders only — this app does not send live immigration updates
         <SettingsRow
           colors={colors}
           icon={<TrendingUp size={20} color="#2E7D32" />}
-          title="Express Entry Draw Results"
-          subtitle="Opens canada.ca in your browser"
+          title="Official Express Entry Rounds Page"
+          subtitle="External canada.ca page — no draw data is shown in app"
           onPress={() => Linking.openURL('https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/submit-profile/rounds-invitations.html')}
         />
         <SettingsRow
